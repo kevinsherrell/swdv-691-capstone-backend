@@ -3,7 +3,6 @@ package com.dev.mcc_tools.domain;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import java.util.Date;
 
 
