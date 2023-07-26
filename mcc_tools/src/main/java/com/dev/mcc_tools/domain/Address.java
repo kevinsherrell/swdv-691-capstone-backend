@@ -9,7 +9,6 @@ import java.util.Date;
 
 @Entity
 @Table(name = "addresses")
-@CrossOrigin
 public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
