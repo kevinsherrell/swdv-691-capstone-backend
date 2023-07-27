@@ -1,6 +1,7 @@
 package com.dev.mcc_tools.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 
@@ -18,8 +19,10 @@ public class Role {
     private String type;
 
     @JsonFormat(pattern = "yyyy-mm-dd HH:mm")
+    @JsonIgnore
     private Date date_created;
     @JsonFormat(pattern = "yyyy-mm-dd HH:mm")
+    @JsonIgnore
     private Date date_updated;
 
     @PrePersist

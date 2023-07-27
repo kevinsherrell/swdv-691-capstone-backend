@@ -1,6 +1,8 @@
 package com.dev.mcc_tools.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import java.util.Date;
@@ -20,6 +22,7 @@ public class User{
     private String password;
 
     @Column(name = "role_id")
+//    @JsonIgnore
     private int roleID;
 
     @JsonFormat(pattern = "yyyy-mm-dd HH:mm")
@@ -33,6 +36,7 @@ public class User{
 
     @OneToOne
     @JoinColumn(name = "user_id", referencedColumnName = "user_id", insertable = false, updatable = false)
+    @JsonIgnore
     private Profile profile;
 
     @PrePersist
@@ -53,6 +57,13 @@ public class User{
         this.date_created = date_created;
         this.date_updated = date_updated;
     }
+
+    public User(String email, String password, int roleID) {
+        this.email = email;
+        this.password = password;
+        this.roleID = roleID;
+    }
+
     public User(){
 
     }
