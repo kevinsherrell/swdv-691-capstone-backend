@@ -3,6 +3,7 @@ package com.dev.mcc_tools.domain;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+
 import java.util.Date;
 
 
@@ -11,17 +12,21 @@ import java.util.Date;
 public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
+    @Column(name = "address_id")
     private int addressID;
+    @Column(name = "address_1")
     @NotBlank
     private String address1;
+    @Column(name = "address_2")
     private String address2;
     @NotBlank
     private String city;
     @NotBlank
     private String state;
+    @Column(name = "zip_code")
     @NotBlank
     private String zipCode;
+    @Column(name = "profile_id")
     @NotBlank
     private int profileID;
 
@@ -31,13 +36,30 @@ public class Address {
     private Date date_updated;
 
     @PrePersist
-    protected void onCreate(){
+    protected void onCreate() {
         this.date_created = new Date();
     }
+
     @PreUpdate
-    protected void onUpdate(){
+    protected void onUpdate() {
         this.date_updated = new Date();
     }
+
+
+    public Address(int addressID, String address1, String address2, String city, String state, String zipCode, int profileID) {
+        this.addressID = addressID;
+        this.address1 = address1;
+        this.address2 = address2;
+        this.city = city;
+        this.state = state;
+        this.zipCode = zipCode;
+        this.profileID = profileID;
+    }
+
+    public Address() {
+
+    }
+
     public int getAddressID() {
         return addressID;
     }

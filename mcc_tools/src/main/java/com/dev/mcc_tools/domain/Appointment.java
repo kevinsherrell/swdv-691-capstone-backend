@@ -4,7 +4,10 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import java.util.Date;
+import java.util.List;
 
+@Entity
+@Table(name = "appointments")
 public class Appointment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,11 +19,20 @@ public class Appointment {
     @NotBlank
     private String status;
     private String notes;
-
+    @NotBlank
+    @Column(name = "order_id")
+    private int orderID;
+    @NotBlank
+    @Column(name = "profile_id")
+    private int profileID;
     @JsonFormat(pattern = "yyyy-mm-dd HH:mm")
     private Date date_created;
     @JsonFormat(pattern = "yyyy-mm-dd HH:mm")
     private Date date_updated;
+
+    @OneToMany
+    @JoinColumn(name = "order_id", referencedColumnName = "order_id", insertable = false, updatable = false)
+    private List<Order> orders;
 
     @PrePersist
     protected void onCreate(){
@@ -29,6 +41,20 @@ public class Appointment {
     @PreUpdate
     protected void onUpdate(){
         this.date_updated = new Date();
+    }
+
+    public Appointment(int appointmentID, Date dateAndTime, String status, String notes, int orderID, int profileID, Date date_created, Date date_updated) {
+        this.appointmentID = appointmentID;
+        this.dateAndTime = dateAndTime;
+        this.status = status;
+        this.notes = notes;
+        this.orderID = orderID;
+        this.profileID = profileID;
+        this.date_created = date_created;
+        this.date_updated = date_updated;
+    }
+
+    public Appointment() {
     }
 
     public int getAppointmentID() {
@@ -63,6 +89,22 @@ public class Appointment {
         this.notes = notes;
     }
 
+    public int getOrderID() {
+        return orderID;
+    }
+
+    public void setOrderID(int orderID) {
+        this.orderID = orderID;
+    }
+
+    public int getProfileID() {
+        return profileID;
+    }
+
+    public void setProfileID(int profileID) {
+        this.profileID = profileID;
+    }
+
     public Date getDate_created() {
         return date_created;
     }
@@ -79,6 +121,14 @@ public class Appointment {
         this.date_updated = date_updated;
     }
 
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
+    }
+
     @Override
     public String toString() {
         return "Appointment{" +
@@ -86,6 +136,8 @@ public class Appointment {
                 ", dateAndTime=" + dateAndTime +
                 ", status='" + status + '\'' +
                 ", notes='" + notes + '\'' +
+                ", orderID=" + orderID +
+                ", profileID=" + profileID +
                 ", date_created=" + date_created +
                 ", date_updated=" + date_updated +
                 '}';
