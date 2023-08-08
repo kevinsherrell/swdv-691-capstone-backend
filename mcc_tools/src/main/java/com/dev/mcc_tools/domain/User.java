@@ -1,8 +1,6 @@
 package com.dev.mcc_tools.domain;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import java.util.Date;
@@ -19,6 +17,7 @@ public class User{
     @Column(unique = true)
     private String email;
     @NotBlank
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
     @Column(name = "role_id")
@@ -80,6 +79,7 @@ public class User{
         return email;
     }
 
+
     public void setEmail(String email) {
         this.email = email;
     }
@@ -87,6 +87,7 @@ public class User{
     public String getPassword() {
         return password;
     }
+
 
     public void setPassword(String password) {
         this.password = password;
