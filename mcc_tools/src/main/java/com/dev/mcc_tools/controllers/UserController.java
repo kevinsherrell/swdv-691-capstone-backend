@@ -2,6 +2,7 @@ package com.dev.mcc_tools.controllers;
 
 import com.dev.mcc_tools.domain.User;
 import com.dev.mcc_tools.services.UserService;
+import com.dev.mcc_tools.validation.MccValidator;
 import jakarta.validation.Valid;
 import org.apache.tomcat.util.http.parser.HttpParser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.Format;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/user")
@@ -42,17 +45,41 @@ public class UserController {
         return new ResponseEntity<>(found, HttpStatus.OK);
     }
 
-    @PutMapping("/update_password")
-    public HttpEntity<?> updateUserPassword(@RequestBody User user){
-        // update user
-        User updated = userService.saveOrUpdateUser(user);
-        FormattedResponse response = new FormattedResponse(HttpStatus.OK.value(), true, updated);
-        // send email to the user confirming the password update.
+    @PutMapping("/{pk}/update_password")
+    public HttpEntity<?> updateUserPassword(@PathVariable int pk, @RequestBody Map<String, String> updateObj) {
+        FormattedResponse response;
+        MccValidator validator = new MccValidator();
+        // get user by id
+        User user = userService.findUserById(pk);
+        // get hashed user password
+        String oldPassword = user.getPassword();
+
+        // compare old password to new password
+
+        // check if new password is the same as the old password
+        HashMap<String, String> errors = validator.checkPasswordUpdate(oldPassword, updateObj);
+
+        // hash the old password
+        // set the found user password to the new password
+        if (errors == null) {
+            System.out.println("No Errors");
+            user.setPassword(updateObj.get("newPassword"));
+            // save the user
+            userService.saveOrUpdateUser(user);
+            // send and email to the user confirming that the password has been changed.
+
+            response = new FormattedResponse(HttpStatus.OK.value(), true, user);
+        } else {
+            System.out.println("Errors present");
+            response = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), false, errors);
+        }
 
         return new HttpEntity<>(response);
+
     }
+
     @PutMapping("/update")
-    public HttpEntity<?> updateUser(@RequestBody User user){
+    public HttpEntity<?> updateUser(@RequestBody User user) {
 
         User updated = userService.saveOrUpdateUser(user);
         FormattedResponse response = new FormattedResponse(HttpStatus.OK.value(), true, updated);

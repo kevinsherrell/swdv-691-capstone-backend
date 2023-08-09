@@ -1,13 +1,15 @@
 package com.dev.mcc_tools.controllers;
 
+import java.util.HashMap;
+
 public class ErrorResponse extends FormattedResponse {
 
     private int statusCode;
     private boolean success;
-    private String message;
+    private HashMap<String, String> message;
 
 
-    public ErrorResponse(int statusCode, boolean success , String message) {
+    public ErrorResponse(int statusCode, boolean success , HashMap<String, String> message) {
         super();
         this.statusCode = statusCode;
         this.success = success;
@@ -30,11 +32,11 @@ public class ErrorResponse extends FormattedResponse {
         this.success = success;
     }
 
-    public String getMessage() {
+    public HashMap<String, String> getMessage() {
         return message;
     }
 
-    public void setMessage(String message) {
+    public void setMessage(HashMap<String, String> message) {
         this.message = message;
     }
 }

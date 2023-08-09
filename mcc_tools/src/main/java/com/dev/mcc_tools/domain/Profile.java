@@ -3,6 +3,8 @@ package com.dev.mcc_tools.domain;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 import java.util.Date;
 import java.util.List;
 
@@ -22,7 +24,7 @@ public class Profile{
     @NotBlank
     @Column(name = "last_name")
     private String lastName;
-    @NotBlank
+    @NotNull
     @Column(name = "user_id")
     private int userID;
 
@@ -68,15 +70,13 @@ public class Profile{
         this.date_updated = date_updated;
     }
 
-    public Profile(int profileID, String firstName, String lastName, int userID, PhoneNumber phoneNumber, Date date_created, Date date_updated) {
+    public Profile(int profileID, String firstName, String lastName, int userID) {
         this.profileID = profileID;
         this.firstName = firstName;
         this.middleInitial = "none";
         this.lastName = lastName;
         this.userID = userID;
-        this.phoneNumber = phoneNumber;
-        this.date_created = date_created;
-        this.date_updated = date_updated;
+
     }
 
     public Profile() {

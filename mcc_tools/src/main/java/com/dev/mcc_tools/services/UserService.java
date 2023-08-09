@@ -30,7 +30,6 @@ public class UserService {
 
         User found = userRepository.findById(id);
         return found;
-
-
+        
     }
 }
