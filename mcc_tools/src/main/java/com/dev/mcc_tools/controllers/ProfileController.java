@@ -41,11 +41,30 @@ public class ProfileController {
 
 
     @GetMapping("/{profileID}")
-    public ResponseEntity<?> getUserById(@PathVariable int profileID) {
+    public ResponseEntity<?> getProfileByID(@PathVariable int profileID) {
         Profile found = profileService.findProfileById(profileID);
         return new ResponseEntity<>(found, HttpStatus.OK);
     }
 
+    @GetMapping("/user/{userID}")
+    public HttpEntity<?> getProfileByUserID(@PathVariable int userID) {
+        FormattedResponse response;
+        MccValidator validator = new MccValidator();
+        Profile found = profileService.findProfileByUserID(userID);
+        System.out.println(found);
+        HashMap<String, String> errors = validator.checkProfile(found);
+
+
+        if (found != null) {
+            response = new FormattedResponse(HttpStatus.OK.value(), true, found);
+        } else {
+            response = new ErrorResponse(HttpStatus.BAD_REQUEST
+                    .value(), false, errors);
+
+        }
+        return new HttpEntity<>(response);
+
+    }
 //    @PutMapping("/{pk}/update_password")
 //    public HttpEntity<?> updateUserPassword(@PathVariable int pk, @RequestBody Map<String, String> updateObj) {
 //        FormattedResponse response;
@@ -80,17 +99,17 @@ public class ProfileController {
 //    }
 
     @PutMapping("/update/{pk}")
-    public HttpEntity<?> updateProfile(@PathVariable int pk,@RequestBody Profile profile) {
+    public HttpEntity<?> updateProfile(@PathVariable int pk, @RequestBody Profile profile) {
         FormattedResponse response;
         MccValidator validator = new MccValidator();
         Profile found = profileService.findProfileById(pk);
         System.out.println(found);
         HashMap<String, String> errors = validator.checkProfile(found);
-        if(errors.isEmpty()){
+        if (errors.isEmpty()) {
             Profile updated = profileService.saveOrUpdateProfile(profile);
-             response = new FormattedResponse(HttpStatus.OK.value(), true, updated);
-        }else{
-             response = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), false, errors);
+            response = new FormattedResponse(HttpStatus.OK.value(), true, updated);
+        } else {
+            response = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), false, errors);
         }
 
 
