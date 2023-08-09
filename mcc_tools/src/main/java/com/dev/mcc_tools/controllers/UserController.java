@@ -61,7 +61,7 @@ public class UserController {
 
         // hash the old password
         // set the found user password to the new password
-        if (errors == null) {
+        if (errors.isEmpty()) {
             System.out.println("No Errors");
             user.setPassword(updateObj.get("newPassword"));
             // save the user
