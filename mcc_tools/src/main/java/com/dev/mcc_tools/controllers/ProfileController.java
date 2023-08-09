@@ -32,20 +32,19 @@ public class ProfileController {
         return new HttpEntity<>(response);
     }
 
-//    @GetMapping("")
-//    public HttpEntity<?> getAllUsers() {
-//        Iterable<User> found = userService.findAllUsers();
-//        FormattedResponse response = new FormattedResponse(HttpStatus.OK.value(), true, found);
-//        return new HttpEntity<>(response);
-//    }
+    @GetMapping("")
+    public HttpEntity<?> getAllProfiles() {
+        Iterable<Profile> found = profileService.findAllProfiles();
+        FormattedResponse response = new FormattedResponse(HttpStatus.OK.value(), true, found);
+        return new HttpEntity<>(response);
+    }
 
 
-//    @GetMapping("/{userID}")
-//    public ResponseEntity<?> getUserById(@PathVariable int userID) {
-//        User found = userService.findUserById(userID);
-//        System.out.println(found.getPassword());
-//        return new ResponseEntity<>(found, HttpStatus.OK);
-//    }
+    @GetMapping("/{profileID}")
+    public ResponseEntity<?> getUserById(@PathVariable int profileID) {
+        Profile found = profileService.findProfileById(profileID);
+        return new ResponseEntity<>(found, HttpStatus.OK);
+    }
 
 //    @PutMapping("/{pk}/update_password")
 //    public HttpEntity<?> updateUserPassword(@PathVariable int pk, @RequestBody Map<String, String> updateObj) {
