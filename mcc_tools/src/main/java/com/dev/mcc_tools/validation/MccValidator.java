@@ -1,5 +1,7 @@
 package com.dev.mcc_tools.validation;
 
+import com.dev.mcc_tools.domain.Profile;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,14 +17,14 @@ public class MccValidator {
                 setErrors("password", "new password and verification must match");
             }
 
-            if (this.errors.isEmpty()){
-                return null;
-            }
-
             return this.errors;
-
     }
-
+    public HashMap<String, String>  checkProfile(Profile profile){
+        if(profile == null){
+            setErrors("profile", "profile not found");
+        }
+        return this.errors;
+    }
     public void setErrors(String field, String message) {
         this.errors.put(field, message);
     }

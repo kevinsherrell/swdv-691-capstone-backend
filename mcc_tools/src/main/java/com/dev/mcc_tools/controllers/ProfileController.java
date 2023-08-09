@@ -79,11 +79,21 @@ public class ProfileController {
 //
 //    }
 
-//    @PutMapping("/update")
-//    public HttpEntity<?> updateUser(@RequestBody User user) {
-//
-//        User updated = userService.saveOrUpdateUser(user);
-//        FormattedResponse response = new FormattedResponse(HttpStatus.OK.value(), true, updated);
-//        return new HttpEntity<>(response);
-//    }
+    @PutMapping("/update/{pk}")
+    public HttpEntity<?> updateProfile(@PathVariable int pk,@RequestBody Profile profile) {
+        FormattedResponse response;
+        MccValidator validator = new MccValidator();
+        Profile found = profileService.findProfileById(pk);
+        System.out.println(found);
+        HashMap<String, String> errors = validator.checkProfile(found);
+        if(errors.isEmpty()){
+            Profile updated = profileService.saveOrUpdateProfile(profile);
+             response = new FormattedResponse(HttpStatus.OK.value(), true, updated);
+        }else{
+             response = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), false, errors);
+        }
+
+
+        return new HttpEntity<>(response);
+    }
 }
