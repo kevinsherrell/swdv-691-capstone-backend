@@ -1,7 +1,6 @@
 package com.dev.mcc_tools.services;
 
 import com.dev.mcc_tools.domain.PhoneNumber;
-import com.dev.mcc_tools.domain.Profile;
 import com.dev.mcc_tools.respositories.PhoneNumberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

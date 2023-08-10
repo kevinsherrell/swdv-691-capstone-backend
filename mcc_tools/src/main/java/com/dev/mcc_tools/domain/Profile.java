@@ -11,7 +11,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "profiles")
-public class Profile{
+public class Profile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "profile_id")
@@ -19,7 +19,7 @@ public class Profile{
     @NotBlank
     @Column(name = "first_name")
     private String firstName;
-    @Column(name="middle_initial")
+    @Column(name = "middle_initial")
     private String middleInitial;
     @NotBlank
     @Column(name = "last_name")
@@ -28,9 +28,9 @@ public class Profile{
     @Column(name = "user_id")
     private int userID;
 
-    @OneToOne
+    @OneToMany
     @JoinColumn(name = "profile_id", referencedColumnName = "profile_id", insertable = false, updatable = false)
-    private PhoneNumber phoneNumber;
+    private List<PhoneNumber> phoneNumbers;
     @OneToMany
     @JoinColumn(name = "profile_id", referencedColumnName = "profile_id", insertable = false, updatable = false)
     private List<Order> orders;
@@ -138,12 +138,12 @@ public class Profile{
         this.date_updated = date_updated;
     }
 
-    public PhoneNumber getPhoneNumber() {
-        return phoneNumber;
+    public List<PhoneNumber> getPhoneNumbers() {
+        return phoneNumbers;
     }
 
-    public void setPhoneNumber(PhoneNumber phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setPhoneNumbers(List<PhoneNumber> phoneNumbers) {
+        this.phoneNumbers = phoneNumbers;
     }
 
     public List<Order> getOrders() {
