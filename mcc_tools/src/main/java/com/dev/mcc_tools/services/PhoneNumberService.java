@@ -20,19 +20,22 @@ public class PhoneNumberService {
         return phoneNumber;
     }
 
+    public Iterable<PhoneNumber> saveAllPhoneNumbers(Iterable<PhoneNumber> phoneNumbers) {
+        return phoneNumberRepository.saveAll(phoneNumbers);
+    }
+
     public Iterable<PhoneNumber> findAllPhoneNumbers() {
         return phoneNumberRepository.findAll();
     }
 
-    public PhoneNumber findPhoneNumberByID(int id) {
+    public PhoneNumber findPhoneNumberByID(int phoneID) {
 
-        PhoneNumber found = phoneNumberRepository.findById(id);
-        return found;
+        return phoneNumberRepository.findByPhoneID(phoneID);
+
 
     }
 
-    public PhoneNumber findPhoneNumberByProfileID(int phoneID) {
-        PhoneNumber found = phoneNumberRepository.findByPhoneID(phoneID);
-        return found;
+    public Iterable<PhoneNumber> findPhoneNumbersByProfileID(int profileID) {
+        return phoneNumberRepository.findByProfileID(profileID);
     }
-}
+};
