@@ -11,6 +11,5 @@ import java.util.List;
 public interface ProfileRepository extends CrudRepository<Profile, Integer> {
     Iterable<Profile> findAll();
     Profile findById(int id);
-
     Profile findByUserID(int userID);
 }

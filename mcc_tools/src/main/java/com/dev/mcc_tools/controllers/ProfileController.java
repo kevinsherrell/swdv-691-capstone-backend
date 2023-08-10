@@ -65,53 +65,24 @@ public class ProfileController {
         return new HttpEntity<>(response);
 
     }
-//    @PutMapping("/{pk}/update_password")
-//    public HttpEntity<?> updateUserPassword(@PathVariable int pk, @RequestBody Map<String, String> updateObj) {
-//        FormattedResponse response;
-//        MccValidator validator = new MccValidator();
-//        // get user by id
-//        User user = userService.findUserById(pk);
-//        // get hashed user password
-//        String oldPassword = user.getPassword();
-//
-//        // compare old password to new password
-//
-//        // check if new password is the same as the old password
-//        HashMap<String, String> errors = validator.checkPasswordUpdate(oldPassword, updateObj);
-//
-//        // hash the old password
-//        // set the found user password to the new password
-//        if (errors == null) {
-//            System.out.println("No Errors");
-//            user.setPassword(updateObj.get("newPassword"));
-//            // save the user
-//            userService.saveOrUpdateUser(user);
-//            // send and email to the user confirming that the password has been changed.
-//
-//            response = new FormattedResponse(HttpStatus.OK.value(), true, user);
-//        } else {
-//            System.out.println("Errors present");
-//            response = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), false, errors);
-//        }
-//
-//        return new HttpEntity<>(response);
-//
-//    }
+
 
     @PutMapping("/update/{pk}")
     public HttpEntity<?> updateProfile(@PathVariable int pk, @RequestBody Profile profile) {
         FormattedResponse response;
+
         MccValidator validator = new MccValidator();
+
         Profile found = profileService.findProfileById(pk);
-        System.out.println(found);
+
         HashMap<String, String> errors = validator.checkProfile(found);
+
         if (errors.isEmpty()) {
             Profile updated = profileService.saveOrUpdateProfile(profile);
             response = new FormattedResponse(HttpStatus.OK.value(), true, updated);
         } else {
             response = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), false, errors);
         }
-
 
         return new HttpEntity<>(response);
     }
