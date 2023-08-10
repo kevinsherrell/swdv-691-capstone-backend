@@ -15,4 +15,6 @@ public interface PhoneNumberRepository extends CrudRepository<PhoneNumber, Integ
     PhoneNumber findByPhoneID(int phoneID);
     Iterable<PhoneNumber> findByProfileID(int profileID);
 
+    @Query(value = "select count(*) from phone_numbers  where phone_numbers.is_primary = true", nativeQuery = true)
+    int countPrimary();
 }

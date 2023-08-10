@@ -21,7 +21,8 @@ public class PhoneNumber {
     @Column(name = "phone_type")
     private String phoneType;
     @NotNull
-    private Boolean isPrimary;
+    @Column(name = "is_primary")
+    private Boolean isPrimary = false;
     @NotNull
     @Column(name = "profile_id")
     private int profileID;
@@ -41,23 +42,23 @@ public class PhoneNumber {
         this.date_updated = new Date();
     }
 
-    public PhoneNumber(int phoneID, String number, String phoneType, Boolean isPrimary,int profileID, Date date_created, Date date_updated) {
+    public PhoneNumber(int phoneID, String number, String phoneType,int profileID) {
         this.phoneID = phoneID;
         this.number = number;
         this.phoneType = phoneType;
-        this.isPrimary = isPrimary;
+//        this.isPrimary = false;
         this.profileID = profileID;
-        this.date_created = date_created;
-        this.date_updated = date_updated;
+//        this.date_created = date_created;
+//        this.date_updated = date_updated;
     }
 
-    public PhoneNumber(int phoneID, String number, String phoneType, Boolean isPrimary,int profileID) {
-        this.phoneID = phoneID;
-        this.number = number;
-        this.phoneType = phoneType;
-        this.isPrimary = isPrimary;
-        this.profileID = profileID;
-    }
+//    public PhoneNumber(int phoneID, String number, String phoneType, int profileID) {
+//        this.phoneID = phoneID;
+//        this.number = number;
+//        this.phoneType = phoneType;
+//        this.isPrimary = false;
+//        this.profileID = profileID;
+//    }
 
     public PhoneNumber() {
     }

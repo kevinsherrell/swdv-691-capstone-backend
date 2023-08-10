@@ -38,4 +38,8 @@ public class PhoneNumberService {
     public Iterable<PhoneNumber> findPhoneNumbersByProfileID(int profileID) {
         return phoneNumberRepository.findByProfileID(profileID);
     }
+
+    public int countPrimaryPhoneNumbers (){
+        return phoneNumberRepository.countPrimary();
+    }
 };

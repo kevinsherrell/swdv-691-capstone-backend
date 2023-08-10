@@ -23,8 +23,15 @@ public class PhoneNumberController {
 
     @PostMapping("")
     public HttpEntity<?> createNewPhoneNumber(@Valid @RequestBody PhoneNumber phoneNumber, BindingResult result) {
+        int primaryCount = phoneNumberService.countPrimaryPhoneNumbers();
+        if(primaryCount < 1){
+            phoneNumber.setIsPrimary(true);
+        }
+
         PhoneNumber created = phoneNumberService.saveOrUpdatePhoneNumber(phoneNumber);
         FormattedResponse response = new FormattedResponse(HttpStatus.CREATED.value(), true, created);
+
+        // select count from phone_numbers where isPrimary = true. if the number is less than 1, set create account to primary
         return new HttpEntity<>(response);
     }
 
