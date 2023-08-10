@@ -1,12 +1,9 @@
 package com.dev.mcc_tools.controllers;
-
 import com.dev.mcc_tools.domain.PhoneNumber;
 import com.dev.mcc_tools.services.PhoneNumberService;
 import com.dev.mcc_tools.validation.MccValidator;
-import com.sun.net.httpserver.HttpsServer;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
@@ -31,7 +28,6 @@ public class PhoneNumberController {
         PhoneNumber created = phoneNumberService.saveOrUpdatePhoneNumber(phoneNumber);
         FormattedResponse response = new FormattedResponse(HttpStatus.CREATED.value(), true, created);
 
-        // select count from phone_numbers where isPrimary = true. if the number is less than 1, set create account to primary
         return new HttpEntity<>(response);
     }
 
@@ -42,33 +38,29 @@ public class PhoneNumberController {
         return new HttpEntity<>(response);
     }
 
+    @GetMapping("/profile/{profileID}")
+    public HttpEntity<?> updatePhoneNumberByProfileID(@PathVariable int profileID) {
+        FormattedResponse response;
 
+        MccValidator validator = new MccValidator();
+
+        Iterable<PhoneNumber> found = phoneNumberService.findPhoneNumbersByProfileID(profileID);
+
+        HashMap<String, String> errors = validator.checkPhoneNumber(found);
+
+        if (errors.isEmpty()) {
+            response = new FormattedResponse(HttpStatus.OK.value(), true, found);
+        } else {
+            response = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), false, errors);
+        }
+
+        return new HttpEntity<>(response);
+    }
     @GetMapping("/{phoneID}")
     public HttpEntity<?> getPhoneNumberByID(@PathVariable int phoneID) {
         PhoneNumber found = phoneNumberService.findPhoneNumberByID(phoneID);
         return new HttpEntity<>(found);
     }
-
-//    @GetMapping("/user/{userID}")
-//    public HttpEntity<?> getProfileByUserID(@PathVariable int userID) {
-//        FormattedResponse response;
-//        MccValidator validator = new MccValidator();
-//        Profile found = profileService.findProfileByUserID(userID);
-//        System.out.println(found);
-//        HashMap<String, String> errors = validator.checkProfile(found);
-//
-//
-//        if (found != null) {
-//            response = new FormattedResponse(HttpStatus.OK.value(), true, found);
-//        } else {
-//            response = new ErrorResponse(HttpStatus.BAD_REQUEST
-//                    .value(), false, errors);
-//
-//        }
-//        return new HttpEntity<>(response);
-//
-//    }
-
 
         @PutMapping("/update/{pk}")
     public HttpEntity<?> updatePhoneNumber(@PathVariable int pk, @RequestBody PhoneNumber phoneNumber) {
@@ -89,6 +81,8 @@ public class PhoneNumberController {
 
         return new HttpEntity<>(response);
     }
+
+
     @PutMapping("/{pk}/makePrimary")
     public HttpEntity<?> makePrimary(@PathVariable int pk) {
         PhoneNumber found = phoneNumberService.findPhoneNumberByID(pk);
