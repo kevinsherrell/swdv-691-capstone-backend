@@ -70,27 +70,27 @@ public class PhoneNumberController {
 //    }
 
 
-    //    @PutMapping("/update/{pk}")
-//    public HttpEntity<?> updateProfile(@PathVariable int pk, @RequestBody Profile profile) {
-//        FormattedResponse response;
-//
-//        MccValidator validator = new MccValidator();
-//
-//        Profile found = profileService.findProfileById(pk);
-//
-//        HashMap<String, String> errors = validator.checkProfile(found);
-//
-//        if (errors.isEmpty()) {
-//            Profile updated = profileService.saveOrUpdateProfile(profile);
-//            response = new FormattedResponse(HttpStatus.OK.value(), true, updated);
-//        } else {
-//            response = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), false, errors);
-//        }
-//
-//        return new HttpEntity<>(response);
-//    }
+        @PutMapping("/update/{pk}")
+    public HttpEntity<?> updatePhoneNumber(@PathVariable int pk, @RequestBody PhoneNumber phoneNumber) {
+        FormattedResponse response;
+
+        MccValidator validator = new MccValidator();
+
+        PhoneNumber found = phoneNumberService.findPhoneNumberByID(pk);
+
+        HashMap<String, String> errors = validator.checkPhoneNumber(found);
+
+        if (errors.isEmpty()) {
+            PhoneNumber updated = phoneNumberService.saveOrUpdatePhoneNumber(phoneNumber);
+            response = new FormattedResponse(HttpStatus.OK.value(), true, updated);
+        } else {
+            response = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), false, errors);
+        }
+
+        return new HttpEntity<>(response);
+    }
     @PutMapping("/{pk}/makePrimary")
-    public HttpEntity<?> makePrimary(@PathVariable int pk, @RequestBody HashMap<String, Boolean> body) {
+    public HttpEntity<?> makePrimary(@PathVariable int pk) {
         PhoneNumber found = phoneNumberService.findPhoneNumberByID(pk);
         System.out.println(found.toString());
         FormattedResponse response;
@@ -99,7 +99,7 @@ public class PhoneNumberController {
 
 //
         if (errors.isEmpty()) {
-            found.setIsPrimary(body.get("isPrimary"));
+            found.setIsPrimary(true);
             PhoneNumber saved = phoneNumberService.saveOrUpdatePhoneNumber(found);
             response = new FormattedResponse(HttpStatus.CREATED.value(), true, saved);
 
