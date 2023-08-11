@@ -3,16 +3,19 @@ package com.dev.mcc_tools.domain;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+
 import java.util.Date;
 
 
 @Entity
 @Table(name = "notifications")
-public class Notification{
+public class Notification {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "notification_id")
     private int notificationID;
+    @NotBlank
+    private String header;
     @NotBlank
     private String body;
     @NotBlank
@@ -26,6 +29,13 @@ public class Notification{
     @JsonFormat(pattern = "yyyy-mm-dd HH:mm")
     private Date date_updated;
 
+    public Notification(String header, String body, String status, int profileID) {
+        this.header = header;
+        this.body = body;
+        this.status = status;
+        this.profileID = profileID;
+    }
+
 
     @PrePersist
     protected void onCreate() {
@@ -37,16 +47,15 @@ public class Notification{
         this.date_updated = new Date();
     }
 
-    public Notification(int notificationID, String body, String status, int profileID, Date date_created, Date date_updated) {
+    public Notification(int notificationID, String header, String body, String status, int profileID) {
         this.notificationID = notificationID;
+        this.header = header;
         this.body = body;
         this.status = status;
         this.profileID = profileID;
-        this.date_created = date_created;
-        this.date_updated = date_updated;
     }
-
     public Notification() {
+
     }
 
     public int getNotificationID() {
@@ -55,6 +64,14 @@ public class Notification{
 
     public void setNotificationID(int notificationID) {
         this.notificationID = notificationID;
+    }
+
+    public String getHeader() {
+        return header;
+    }
+
+    public void setHeader(String header) {
+        this.header = header;
     }
 
     public String getBody() {
@@ -95,5 +112,18 @@ public class Notification{
 
     public void setDate_updated(Date date_updated) {
         this.date_updated = date_updated;
+    }
+
+    @Override
+    public String toString() {
+        return "Notification{" +
+                "notificationID=" + notificationID +
+                ", header='" + header + '\'' +
+                ", body='" + body + '\'' +
+                ", status='" + status + '\'' +
+                ", profileID=" + profileID +
+                ", date_created=" + date_created +
+                ", date_updated=" + date_updated +
+                '}';
     }
 }

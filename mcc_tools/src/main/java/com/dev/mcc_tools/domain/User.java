@@ -21,7 +21,6 @@ public class User{
     private String password;
 
     @Column(name = "role_id")
-//    @JsonIgnore
     private int roleID;
 
     @JsonFormat(pattern = "yyyy-mm-dd HH:mm")
