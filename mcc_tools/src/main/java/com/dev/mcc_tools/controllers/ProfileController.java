@@ -3,6 +3,7 @@ package com.dev.mcc_tools.controllers;
 import com.dev.mcc_tools.domain.Profile;
 import com.dev.mcc_tools.services.ProfileService;
 import com.dev.mcc_tools.validation.MccValidator;
+import com.dev.mcc_tools.validation.ProfileValidator;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -18,7 +19,7 @@ import java.util.HashMap;
 public class ProfileController {
     @Autowired
     private ProfileService profileService;
-
+    private final ProfileValidator validator = new ProfileValidator();
     @PostMapping("")
     public HttpEntity<?> createNewProfile(@Valid @RequestBody Profile profile, BindingResult result) {
         Profile created = profileService.saveOrUpdateProfile(profile);
@@ -43,10 +44,10 @@ public class ProfileController {
     @GetMapping("/user/{userID}")
     public HttpEntity<?> getProfileByUserID(@PathVariable int userID) {
         FormattedResponse response;
-        MccValidator validator = new MccValidator();
+//        ProfileValidator validator = new ProfileValidator();
         Profile found = profileService.findProfileByUserID(userID);
         System.out.println(found);
-        HashMap<String, String> errors = validator.checkProfile(found);
+        HashMap<String, String> errors = this.validator.checkProfile(found);
 
 
         if (found != null) {
@@ -65,11 +66,12 @@ public class ProfileController {
     public HttpEntity<?> updateProfile(@PathVariable int pk, @RequestBody Profile profile) {
         FormattedResponse response;
 
-        MccValidator validator = new MccValidator();
-
+//        ProfileValidator validator = new ProfileValidator();
         Profile found = profileService.findProfileById(pk);
 
-        HashMap<String, String> errors = validator.checkProfile(found);
+        this.validator.checkProfile(found);
+
+        HashMap<String, String> errors = this.validator.getErrors();
 
         if (errors.isEmpty()) {
             Profile updated = profileService.saveOrUpdateProfile(profile);

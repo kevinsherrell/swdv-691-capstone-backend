@@ -14,12 +14,9 @@ public class UserService {
     private UserRepository userRepository;
 
     public User saveOrUpdateUser(User user) {
-        try {
-            return userRepository.save(user);
-        } catch (Exception e) {
-            e.getCause();
-        }
-        return user;
+        System.out.println("updating user");
+        User updated = userRepository.save(user);
+        return updated;
     }
 
     public Iterable<User> findAllUsers() {

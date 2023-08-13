@@ -3,6 +3,8 @@ package com.dev.mcc_tools.domain;
 import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import org.hibernate.annotations.DynamicUpdate;
+
 import java.util.Date;
 
 
@@ -11,12 +13,12 @@ import java.util.Date;
 public class User{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
+    @Column(name = "user_id", updatable = false)
     private int userID;
     @NotBlank
     @Column(unique = true)
     private String email;
-    @NotBlank
+//    @NotBlank
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
@@ -47,18 +49,26 @@ public class User{
         this.date_updated = new Date();
     }
 
-    public User(int userID, String email, String password, int roleID, Date date_created, Date date_updated) {
+    public User(int userID, String email, String password, int roleID) {
         this.userID = userID;
         this.email = email;
         this.password = password;
         this.roleID = roleID;
-        this.date_created = date_created;
-        this.date_updated = date_updated;
     }
 
+    public User(int userID, String email, int roleID){
+        this.userID = userID;
+        this.email = email;
+        this.roleID = roleID;
+    }
     public User(String email, String password, int roleID) {
         this.email = email;
         this.password = password;
+        this.roleID = roleID;
+    }
+
+    public User(String email, int roleID){
+        this.email = email;
         this.roleID = roleID;
     }
 

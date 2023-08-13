@@ -2,6 +2,7 @@ package com.dev.mcc_tools.controllers;
 import com.dev.mcc_tools.domain.PhoneNumber;
 import com.dev.mcc_tools.services.PhoneNumberService;
 import com.dev.mcc_tools.validation.MccValidator;
+import com.dev.mcc_tools.validation.PhoneNumberValidator;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -42,7 +43,7 @@ public class PhoneNumberController {
     public HttpEntity<?> updatePhoneNumberByProfileID(@PathVariable int profileID) {
         FormattedResponse response;
 
-        MccValidator validator = new MccValidator();
+        PhoneNumberValidator validator = new PhoneNumberValidator();
 
         Iterable<PhoneNumber> found = phoneNumberService.findPhoneNumbersByProfileID(profileID);
 
@@ -66,7 +67,7 @@ public class PhoneNumberController {
     public HttpEntity<?> updatePhoneNumber(@PathVariable int pk, @RequestBody PhoneNumber phoneNumber) {
         FormattedResponse response;
 
-        MccValidator validator = new MccValidator();
+        PhoneNumberValidator validator = new PhoneNumberValidator();
 
         PhoneNumber found = phoneNumberService.findPhoneNumberByID(pk);
 
@@ -88,7 +89,7 @@ public class PhoneNumberController {
         PhoneNumber found = phoneNumberService.findPhoneNumberByID(pk);
         System.out.println(found.toString());
         FormattedResponse response;
-        MccValidator validator =  new MccValidator();
+        PhoneNumberValidator validator =  new PhoneNumberValidator();
         HashMap<String, String> errors = validator.checkPhoneNumber(found);
 
 //
