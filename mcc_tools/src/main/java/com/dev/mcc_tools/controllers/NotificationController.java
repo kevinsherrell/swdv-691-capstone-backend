@@ -117,25 +117,23 @@ public class NotificationController {
 //    }
 
 
-//    @PutMapping("/update/{pk}")
-//    public HttpEntity<?> updateProfile(@PathVariable int pk, @RequestBody Profile profile) {
-//        FormattedResponse response;
-//
-//        MccValidator validator = new MccValidator();
-//
-//        Profile found = profileService.findProfileById(pk);
-//
-//        HashMap<String, String> errors = validator.checkProfile(found);
-//
-//        if (errors.isEmpty()) {
-//            Profile updated = profileService.saveOrUpdateProfile(profile);
-//            response = new FormattedResponse(HttpStatus.OK.value(), true, updated);
-//        } else {
-//            response = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), false, errors);
-//        }
-//
-//        return new HttpEntity<>(response);
-//    }
+    @PutMapping("/update/{pk}")
+    public HttpEntity<?> updateNotification(@PathVariable int pk, @RequestBody Notification profile) {
+        FormattedResponse response;
+
+        Notification found = notificationService.findNotificationByID(pk);
+
+        HashMap<String, String> errors = notificationValidator.checkNotification(found);
+
+        if (errors.isEmpty()) {
+            Notification updated = notificationService.saveOrUpdateNotification(profile);
+            response = new FormattedResponse(HttpStatus.OK.value(), true, updated);
+        } else {
+            response = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), false, errors);
+        }
+
+        return new HttpEntity<>(response);
+    }
 
 
 }

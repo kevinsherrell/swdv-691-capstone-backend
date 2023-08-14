@@ -26,22 +26,10 @@ public class SearchRequest {
     private String maxTime;
 
     public Timestamp toTimestamp(String dateString) throws ParseException {
+        Date formattedDate = new SimpleDateFormat("yyyy-MM-dd Hh:mm").parse(dateString);
 
-        ZoneId localZone = ZoneId.of(TimeZone.getDefault().getID());
-
-        DateTimeFormatter dtFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-
-        LocalDateTime localDateTime =LocalDateTime.parse(dateString, dtFormat);
-
-        ZonedDateTime localZoneTime = ZonedDateTime.of(localDateTime, localZone);
-        ZonedDateTime utcDateTime = localZoneTime.withZoneSameInstant(ZoneId.of("UTC"));
-
-        System.out.println(dateString);
-        System.out.println(localDateTime);
-        System.out.println(localZoneTime);
-        System.out.println(utcDateTime);
-        System.out.println(Timestamp.valueOf(utcDateTime.toLocalDateTime()));
-        return Timestamp.valueOf(utcDateTime.toLocalDateTime());
+        System.out.println(new Timestamp(formattedDate.getTime()));
+        return new Timestamp(formattedDate.getTime());
 //        Date formattedDate = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(dateString);
 //        return new Timestamp(formattedDate.getTime());
     }

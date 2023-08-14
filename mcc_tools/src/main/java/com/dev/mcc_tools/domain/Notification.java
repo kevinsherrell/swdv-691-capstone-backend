@@ -3,7 +3,12 @@ package com.dev.mcc_tools.domain;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SourceType;
+import org.hibernate.annotations.UpdateTimestamp;
 
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.Date;
 
 
@@ -24,10 +29,12 @@ public class Notification {
     @Column(name = "profile_id")
     private int profileID;
 
-    @JsonFormat(pattern = "yyyy-mm-dd HH:mm")
-    private Date date_created;
-    @JsonFormat(pattern = "yyyy-mm-dd HH:mm")
-    private Date date_updated;
+    @CreationTimestamp(source = SourceType.DB)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "UTC")
+    private Instant date_created;
+    @UpdateTimestamp(source = SourceType.DB)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "UTC")
+    private Instant date_updated;
 
     public Notification(String header, String body, String status, int profileID) {
         this.header = header;
@@ -37,15 +44,15 @@ public class Notification {
     }
 
 
-    @PrePersist
-    protected void onCreate() {
-        this.date_created = new Date();
-    }
-
-    @PreUpdate
-    protected void onUpdate() {
-        this.date_updated = new Date();
-    }
+//    @PrePersist
+//    protected void onCreate() {
+//        this.date_created = new Date();
+//    }
+//
+//    @PreUpdate
+//    protected void onUpdate() {
+//        this.date_updated = new Date();
+//    }
 
     public Notification(int notificationID, String header, String body, String status, int profileID) {
         this.notificationID = notificationID;
@@ -98,19 +105,19 @@ public class Notification {
         this.profileID = profileID;
     }
 
-    public Date getDate_created() {
+    public Instant getDate_created() {
         return date_created;
     }
 
-    public void setDate_created(Date date_created) {
+    public void setDate_created(Instant date_created) {
         this.date_created = date_created;
     }
 
-    public Date getDate_updated() {
+    public Instant getDate_updated() {
         return date_updated;
     }
 
-    public void setDate_updated(Date date_updated) {
+    public void setDate_updated(Instant date_updated) {
         this.date_updated = date_updated;
     }
 

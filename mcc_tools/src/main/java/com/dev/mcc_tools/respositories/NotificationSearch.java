@@ -94,12 +94,12 @@ public class NotificationSearch{
         if(request.getMinDate() != null){
 
             Predicate minDatePredicate = criteriaBuilder
-                    .greaterThanOrEqualTo(root.get("date_created"), request.dateFromString(request.getMaxDate()));
+                    .greaterThanOrEqualTo(root.get("date_created"), request.toTimestamp(request.getMinDate()));
             predicates.add(minDatePredicate);
         }
         if(request.getMaxDate() != null){
             Predicate maxDatePredicate = criteriaBuilder
-                    .lessThanOrEqualTo(root.<Timestamp>get("date_created"), request.toTimestamp(request.getMaxDate()));
+                    .lessThanOrEqualTo(root.get("date_created"), request.toTimestamp(request.getMaxDate()));
             predicates.add(maxDatePredicate);
 
         }
