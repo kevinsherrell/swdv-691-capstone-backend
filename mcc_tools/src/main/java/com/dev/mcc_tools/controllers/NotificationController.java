@@ -18,6 +18,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Array;
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -54,7 +55,6 @@ public class NotificationController {
 //    }
     @GetMapping("")
     public ResponseEntity<?> getAllNotifications(
-//            @RequestParam(required = false, name = "notificationID") Optional<Integer> notificationID,
             @RequestParam(required = false, name = "status") String status,
             @RequestParam(required = false, name = "profileID") Integer profileID,
             @RequestParam(required = false, name = "minDate") String minDate,
@@ -87,8 +87,8 @@ public class NotificationController {
     @GetMapping("/{notificationID}")
     public ResponseEntity<?> getProfileByID(@PathVariable int notificationID) {
         HttpStatus httpStatus = HttpStatus.OK;
-        System.out.println("Hello World");
         Notification found = notificationService.findNotificationByID(notificationID);
+
         FormattedResponse response = new FormattedResponse(httpStatus.value(), true, found);
         return new ResponseEntity<>(response, httpStatus);
     }

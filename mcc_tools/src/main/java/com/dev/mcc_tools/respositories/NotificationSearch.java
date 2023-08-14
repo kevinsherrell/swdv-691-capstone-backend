@@ -14,6 +14,7 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import static com.fasterxml.jackson.databind.type.LogicalType.DateTime;
 
@@ -22,53 +23,6 @@ import static com.fasterxml.jackson.databind.type.LogicalType.DateTime;
 public class NotificationSearch{
 
     private final EntityManager entityManager;
-
-
-
-    public Iterable<Notification> findAllBySimpleQuery(
-            String status,
-            int profileID,
-            String minDate,
-            String maxDate,
-            String minTime,
-            String maxTime
-    ) {
-        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Notification> criteriaQuery = criteriaBuilder.createQuery(Notification.class);
-
-        // select * from notification
-        Root<Notification> root = criteriaQuery.from(Notification.class);
-
-        // prepare the WHERE clause
-        // where status = 'unread'
-        Predicate statusPredicate = criteriaBuilder
-                .like(root.get("status"), status);
-        Predicate profileIDPredicate = criteriaBuilder
-                .like(root.get("profileID"), String.valueOf(profileID));
-        Predicate minDatePredicate = criteriaBuilder
-                .greaterThanOrEqualTo(root.get("profileID"), minDate);
-        Predicate maxDatePredicate = criteriaBuilder
-                .lessThanOrEqualTo(root.get("maxDate"), maxDate);
-        Predicate minTimePredicate = criteriaBuilder
-                .greaterThanOrEqualTo(root.get("minTime"), minTime);
-        Predicate maxTimePredicate = criteriaBuilder
-                .lessThanOrEqualTo(root.get("maxTime"), maxTime);
-
-        Predicate orPredicate = criteriaBuilder.or(
-                statusPredicate,
-                profileIDPredicate,
-                minDatePredicate,
-                maxDatePredicate,
-                minTimePredicate,
-                maxTimePredicate
-        );
-
-        // final query
-        criteriaQuery.where(orPredicate);
-
-        TypedQuery<Notification> query = entityManager.createQuery(criteriaQuery);
-        return query.getResultList();
-    }
 
     public Iterable<Notification> findAllByCriteria(
             SearchRequest request
@@ -92,12 +46,13 @@ public class NotificationSearch{
             predicates.add(profileIDPredicate);
         }
         if(request.getMinDate() != null){
-
+            System.out.println("hopefully correct: " + request.toTimestamp(request.getMinDate()));
             Predicate minDatePredicate = criteriaBuilder
                     .greaterThanOrEqualTo(root.get("date_created"), request.toTimestamp(request.getMinDate()));
             predicates.add(minDatePredicate);
         }
         if(request.getMaxDate() != null){
+            System.out.println("coming from max : "  + request.toTimestamp(request.getMaxDate()));
             Predicate maxDatePredicate = criteriaBuilder
                     .lessThanOrEqualTo(root.get("date_created"), request.toTimestamp(request.getMaxDate()));
             predicates.add(maxDatePredicate);

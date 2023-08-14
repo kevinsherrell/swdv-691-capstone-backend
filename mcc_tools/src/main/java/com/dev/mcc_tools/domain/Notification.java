@@ -31,10 +31,10 @@ public class Notification {
 
     @CreationTimestamp(source = SourceType.DB)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "UTC")
-    private Instant date_created;
+    private Date date_created;
     @UpdateTimestamp(source = SourceType.DB)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "UTC")
-    private Instant date_updated;
+    private Date date_updated;
 
     public Notification(String header, String body, String status, int profileID) {
         this.header = header;
@@ -105,19 +105,19 @@ public class Notification {
         this.profileID = profileID;
     }
 
-    public Instant getDate_created() {
+    public Date getDate_created() {
         return date_created;
     }
 
-    public void setDate_created(Instant date_created) {
+    public void setDate_created(Date date_created) {
         this.date_created = date_created;
     }
 
-    public Instant getDate_updated() {
+    public Date getDate_updated() {
         return date_updated;
     }
 
-    public void setDate_updated(Instant date_updated) {
+    public void setDate_updated(Date date_updated) {
         this.date_updated = date_updated;
     }
 

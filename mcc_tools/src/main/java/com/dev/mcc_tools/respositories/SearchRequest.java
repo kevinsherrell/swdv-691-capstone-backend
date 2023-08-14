@@ -2,17 +2,16 @@ package com.dev.mcc_tools.respositories;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.cglib.core.Local;
+import org.springframework.format.annotation.DateTimeFormat;
 
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
-import java.util.TimeZone;
 
 @Getter
 @Setter
@@ -26,17 +25,13 @@ public class SearchRequest {
     private String maxTime;
 
     public Timestamp toTimestamp(String dateString) throws ParseException {
-        Date formattedDate = new SimpleDateFormat("yyyy-MM-dd Hh:mm").parse(dateString);
+        DateTimeFormatter dtFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        LocalDateTime ldt = LocalDateTime.parse(dateString, dtFormat);
 
-        System.out.println(new Timestamp(formattedDate.getTime()));
-        return new Timestamp(formattedDate.getTime());
-//        Date formattedDate = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(dateString);
-//        return new Timestamp(formattedDate.getTime());
+        System.out.println("localDateTime : " + ldt);
+
+
+        return Timestamp.from(ldt.toInstant(ZoneOffset.UTC));
     }
-    public Date dateFromString(String dateString) throws ParseException {
-        Date formattedDate = new SimpleDateFormat("yyyy-MM-dd Hh:mm").parse(dateString);
-//        System.out.println(formattedDate);
-        System.out.println(new Timestamp(formattedDate.getTime()));
-        return formattedDate;
-    }
+
 }
