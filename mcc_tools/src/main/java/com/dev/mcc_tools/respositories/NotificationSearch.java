@@ -7,16 +7,9 @@ import jakarta.persistence.criteria.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-import java.sql.Timestamp;
 import java.text.ParseException;
-import java.time.Instant;
-import java.time.ZonedDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.TimeZone;
-
-import static com.fasterxml.jackson.databind.type.LogicalType.DateTime;
 
 @Repository
 @RequiredArgsConstructor
@@ -25,7 +18,7 @@ public class NotificationSearch{
     private final EntityManager entityManager;
 
     public Iterable<Notification> findAllByCriteria(
-            SearchRequest request
+            NotificationSearchRequest request
     ) throws ParseException {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Notification> criteriaQuery = criteriaBuilder.createQuery(Notification.class);

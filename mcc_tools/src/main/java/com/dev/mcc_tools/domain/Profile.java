@@ -4,6 +4,9 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SourceType;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.util.Date;
 import java.util.List;
@@ -28,6 +31,9 @@ public class Profile {
     @Column(name = "user_id")
     private int userID;
 
+    @OneToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id", insertable = false, updatable = false)
+    private User user;
     @OneToMany
     @JoinColumn(name = "profile_id", referencedColumnName = "profile_id", insertable = false, updatable = false)
     private List<PhoneNumber> phoneNumbers;
@@ -44,8 +50,10 @@ public class Profile {
     @JoinColumn(name = "profile_id", referencedColumnName = "profile_id", insertable = false, updatable = false)
     private List<Notification> notifications;
 
+    @CreationTimestamp(source = SourceType.DB)
     @JsonFormat(pattern = "yyyy-mm-dd HH:mm")
     private Date date_created;
+    @UpdateTimestamp(source = SourceType.DB)
     @JsonFormat(pattern = "yyyy-mm-dd HH:mm")
     private Date date_updated;
 
@@ -176,6 +184,14 @@ public class Profile {
 
     public void setNotifications(List<Notification> notifications) {
         this.notifications = notifications;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Override

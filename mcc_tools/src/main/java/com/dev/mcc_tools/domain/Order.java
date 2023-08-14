@@ -3,6 +3,10 @@ package com.dev.mcc_tools.domain;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SourceType;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import java.util.Date;
 
 
@@ -26,20 +30,14 @@ public class Order{
     @Column(name = "profile_id")
     private int profileID;
 
+    @CreationTimestamp(source = SourceType.DB)
     @JsonFormat(pattern = "yyyy-mm-dd HH:mm")
     private Date date_created;
+    @UpdateTimestamp(source = SourceType.DB)
     @JsonFormat(pattern = "yyyy-mm-dd HH:mm")
     private Date date_updated;
 
-    @PrePersist
-    protected void onCreate() {
-        this.date_created = new Date();
-    }
 
-    @PreUpdate
-    protected void onUpdate() {
-        this.date_updated = new Date();
-    }
 
     public Order(int orderID, String invoiceNumber, String status, String location, int profileID, Date date_created, Date date_updated) {
         this.orderID = orderID;

@@ -1,6 +1,8 @@
 package com.dev.mcc_tools.controllers;
 
 import com.dev.mcc_tools.domain.User;
+import com.dev.mcc_tools.respositories.UserSearch;
+import com.dev.mcc_tools.respositories.UserSearchRequest;
 import com.dev.mcc_tools.services.UserService;
 import com.dev.mcc_tools.validation.MccValidator;
 import com.dev.mcc_tools.validation.UserValidator;
@@ -24,6 +26,8 @@ import java.util.Map;
 public class UserController {
     @Autowired
     private UserService userService;
+    @Autowired
+    private UserSearch userSearch;
     private final UserValidator userValidator = new UserValidator();
 
 
@@ -45,6 +49,24 @@ public class UserController {
         return new ResponseEntity<>(response, httpStatus);
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<?> userSearch(
+            @RequestParam(required = false, name = "roleID") Integer roleID,
+            @RequestParam(required = false, name = "email") String email
+    ) {
+        UserSearchRequest request = new UserSearchRequest();
+
+
+        if (email != null) request.setEmail(email);
+        if (roleID != null) request.setRoleID(roleID);
+
+        HttpStatus httpStatus = HttpStatus.OK;
+        FormattedResponse response;
+
+        Iterable<User> found = userSearch.findAllByCriteria(request);
+        response = new FormattedResponse(httpStatus.value(), true, found);
+        return new ResponseEntity<>(response, httpStatus);
+    }
 
     @GetMapping("/{userID}")
     public ResponseEntity<?> getUserById(@PathVariable int userID) {
@@ -105,12 +127,12 @@ public class UserController {
 
         userValidator.checkUserForUpdate(found);
 
-        if(errors.isEmpty()){
+        if (errors.isEmpty()) {
             user.setPassword(found.getPassword());
             user.setDate_created(found.getDate_created());
             User updated = userService.saveOrUpdateUser(user);
             response = new FormattedResponse(httpStatus.value(), true, updated);
-        }else{
+        } else {
             httpStatus = HttpStatus.BAD_REQUEST;
             response = new ErrorResponse(httpStatus.value(), false, errors);
         }

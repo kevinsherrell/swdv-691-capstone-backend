@@ -3,6 +3,10 @@ package com.dev.mcc_tools.domain;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SourceType;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import java.util.Date;
 import java.util.List;
 
@@ -25,8 +29,10 @@ public class Appointment {
     @NotBlank
     @Column(name = "profile_id")
     private int profileID;
+    @CreationTimestamp(source = SourceType.DB)
     @JsonFormat(pattern = "yyyy-mm-dd HH:mm")
     private Date date_created;
+    @UpdateTimestamp(source = SourceType.DB)
     @JsonFormat(pattern = "yyyy-mm-dd HH:mm")
     private Date date_updated;
 
@@ -34,14 +40,7 @@ public class Appointment {
     @JoinColumn(name = "order_id", referencedColumnName = "order_id", insertable = false, updatable = false)
     private List<Order> orders;
 
-    @PrePersist
-    protected void onCreate(){
-        this.date_created = new Date();
-    }
-    @PreUpdate
-    protected void onUpdate(){
-        this.date_updated = new Date();
-    }
+
 
     public Appointment(int appointmentID, Date dateAndTime, String status, String notes, int orderID, int profileID, Date date_created, Date date_updated) {
         this.appointmentID = appointmentID;

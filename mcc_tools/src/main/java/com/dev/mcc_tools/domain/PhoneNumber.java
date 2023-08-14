@@ -4,6 +4,9 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SourceType;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.util.Date;
 
@@ -26,21 +29,14 @@ public class PhoneNumber {
     @NotNull
     @Column(name = "profile_id")
     private int profileID;
+    @CreationTimestamp(source = SourceType.DB)
     @JsonFormat(pattern = "yyyy-mm-dd HH:mm")
     private Date date_created;
+    @UpdateTimestamp(source = SourceType.DB)
     @JsonFormat(pattern = "yyyy-mm-dd HH:mm")
     private Date date_updated;
 
 
-    @PrePersist
-    protected void onCreate() {
-        this.date_created = new Date();
-    }
-
-    @PreUpdate
-    protected void onUpdate() {
-        this.date_updated = new Date();
-    }
 
     public PhoneNumber(int phoneID, String number, String phoneType,int profileID) {
         this.phoneID = phoneID;

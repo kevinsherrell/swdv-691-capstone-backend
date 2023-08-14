@@ -2,13 +2,9 @@ package com.dev.mcc_tools.controllers;
 
 import com.dev.mcc_tools.domain.Notification;
 import com.dev.mcc_tools.respositories.NotificationSearch;
-import com.dev.mcc_tools.respositories.SearchRequest;
+import com.dev.mcc_tools.respositories.NotificationSearchRequest;
 import com.dev.mcc_tools.services.NotificationService;
-import com.dev.mcc_tools.validation.MccValidator;
 import com.dev.mcc_tools.validation.NotificationValidator;
-import com.dev.mcc_tools.validation.ProfileValidator;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EntityManager;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -17,13 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Array;
-import java.sql.Timestamp;
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/notification")
@@ -45,16 +36,20 @@ public class NotificationController {
         return new ResponseEntity<>(response, httpStatus);
     }
 
-    //    @GetMapping("")
-//    public ResponseEntity<?> getAllNotifications() {
-//        HttpStatus httpStatus = HttpStatus.OK;
-//
-//        Iterable<Notification> found = notificationService.findAllNotifications();
-//        FormattedResponse response = new FormattedResponse(httpStatus.value(), true, found);
-//        return new ResponseEntity<>(response, httpStatus);
-//    }
     @GetMapping("")
-    public ResponseEntity<?> getAllNotifications(
+    public ResponseEntity<?> getAllNotifications() {
+
+        HttpStatus httpStatus = HttpStatus.OK;
+
+
+        Iterable<Notification> found = notificationService.findAllNotifications();
+
+        FormattedResponse response = new FormattedResponse(httpStatus.value(), true, found);
+        return new ResponseEntity<>(response, httpStatus);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<?> notificationSearch(
             @RequestParam(required = false, name = "status") String status,
             @RequestParam(required = false, name = "profileID") Integer profileID,
             @RequestParam(required = false, name = "minDate") String minDate,
@@ -62,9 +57,7 @@ public class NotificationController {
             @RequestParam(required = false, name = "minTime") String minTime,
             @RequestParam(required = false, name = "maxTime") String maxTime
     ) throws ParseException {
-
-
-        SearchRequest request = new SearchRequest();
+        NotificationSearchRequest request = new NotificationSearchRequest();
         if (status != null) request.setStatus(status);
         if (profileID != null) request.setProfileID(profileID);
         if (minDate != null) request.setMinDate(minDate);
@@ -75,11 +68,7 @@ public class NotificationController {
         HttpStatus httpStatus = HttpStatus.OK;
 
         System.out.println(request.getProfileID());
-//        Iterable<Notification> found = notificationService.findAllNotifications();
         Iterable<Notification> found = notificationSearch.findAllByCriteria(request);
-//        if(!found.iterator().hasNext()){
-//            found = notificationService.findAllNotifications();
-//        }
         FormattedResponse response = new FormattedResponse(httpStatus.value(), true, found);
         return new ResponseEntity<>(response, httpStatus);
     }
@@ -92,29 +81,6 @@ public class NotificationController {
         FormattedResponse response = new FormattedResponse(httpStatus.value(), true, found);
         return new ResponseEntity<>(response, httpStatus);
     }
-//
-//    @GetMapping("")
-//public ResponseEntity<?> getNotificationByProfileID(@RequestParam(name = "profileID") int profileID) {
-//        HttpStatus httpStatus = HttpStatus.OK;
-//
-//        FormattedResponse response;
-//
-//        Iterable<Notification> found = notificationService.findNotificationsByProfileID(profileID);
-//
-//        HashMap<String, String> errors = notificationValidator.checkNotification(found);
-//
-//
-//        if (errors.isEmpty()) {
-//            response = new FormattedResponse(httpStatus.value(), true, found);
-//        } else {
-//            httpStatus = HttpStatus.BAD_REQUEST;
-//            response = new ErrorResponse(httpStatus
-//                    .value(), false, errors);
-//
-//        }
-//        return new ResponseEntity<>(response, httpStatus);
-//
-//    }
 
 
     @PutMapping("/update/{pk}")
