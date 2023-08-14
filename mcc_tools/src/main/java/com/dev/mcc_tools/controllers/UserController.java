@@ -26,32 +26,38 @@ public class UserController {
     private UserService userService;
     private final UserValidator userValidator = new UserValidator();
 
+
     @PostMapping("")
-    public HttpEntity<?> createNewUser(@Valid @RequestBody User user, BindingResult result) {
+    public ResponseEntity<?> createNewUser(@Valid @RequestBody User user, BindingResult result) {
+        HttpStatus httpStatus = HttpStatus.CREATED;
+
         User created = userService.saveOrUpdateUser(user);
-        FormattedResponse response = new FormattedResponse(HttpStatus.CREATED.value(), true, created);
-        return new HttpEntity<>(response);
+        FormattedResponse response = new FormattedResponse(httpStatus.value(), true, created);
+        return new ResponseEntity<>(response, httpStatus);
     }
 
     @GetMapping("")
-    public HttpEntity<?> getAllUsers() {
+    public ResponseEntity<?> getAllUsers() {
+        HttpStatus httpStatus = HttpStatus.OK;
+
         Iterable<User> found = userService.findAllUsers();
-        FormattedResponse response = new FormattedResponse(HttpStatus.OK.value(), true, found);
-        return new HttpEntity<>(response);
+        FormattedResponse response = new FormattedResponse(httpStatus.value(), true, found);
+        return new ResponseEntity<>(response, httpStatus);
     }
 
 
     @GetMapping("/{userID}")
     public ResponseEntity<?> getUserById(@PathVariable int userID) {
+        HttpStatus httpStatus = HttpStatus.OK;
+
         User found = userService.findUserById(userID);
-        System.out.println(found.getPassword());
-        return new ResponseEntity<>(found, HttpStatus.OK);
+        return new ResponseEntity<>(found, httpStatus);
     }
 
     @PutMapping("/{pk}/update_password")
     public ResponseEntity<?> updateUserPassword(@PathVariable int pk, @RequestBody Map<String, String> updateObj) {
         userValidator.initializeErrors();
-        HttpStatus httpStatus = null;
+        HttpStatus httpStatus = HttpStatus.CREATED;
         FormattedResponse response;
 
         // get user by id
@@ -67,7 +73,6 @@ public class UserController {
         // hash the old password
         // set the found user password to the new password
         if (errors.isEmpty()) {
-            httpStatus = HttpStatus.OK;
             System.out.println("No Errors");
             user.setPassword(updateObj.get("newPassword"));
             // save the user
@@ -91,7 +96,7 @@ public class UserController {
 
         FormattedResponse response;
 
-        HttpStatus httpStatus;
+        HttpStatus httpStatus = HttpStatus.CREATED;
 
         HashMap<String, String> errors = userValidator.getErrors();
 
@@ -101,7 +106,6 @@ public class UserController {
         userValidator.checkUserForUpdate(found);
 
         if(errors.isEmpty()){
-            httpStatus  = HttpStatus.OK;
             user.setPassword(found.getPassword());
             user.setDate_created(found.getDate_created());
             User updated = userService.saveOrUpdateUser(user);
