@@ -37,8 +37,8 @@ public class OrderService {
 
     }
 
-    public Order findByProfileID(int profileID){
-        Order found = orderRepository.findOrderByProfileID(profileID);
+    public Iterable<Order> findByProfileID(int profileID){
+        Iterable<Order> found = orderRepository.findOrderByProfileID(profileID);
         return found;
     }
 }

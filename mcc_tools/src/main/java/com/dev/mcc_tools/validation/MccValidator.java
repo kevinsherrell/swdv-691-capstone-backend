@@ -26,4 +26,15 @@ public class MccValidator {
     public HashMap<String, String> getErrors() {
         return errors;
     }
+
+    public void nullCheck(String objectName, Object object){
+        if(object == null){
+            setErrors(objectName, objectName + " not found");
+        }
+    }
+    public void emptyCheck(String objectName, Iterable<Object> objects){
+        if(!objects.iterator().hasNext()){
+            setErrors(objectName, objectName + " not found");
+        }
+    }
 }

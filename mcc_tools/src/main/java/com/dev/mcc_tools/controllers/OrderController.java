@@ -89,26 +89,16 @@ public class OrderController {
         return new ResponseEntity<>(response, httpStatus);
     }
 
-//    @GetMapping("/user/{userID}")
-//    public ResponseEntity<?> getProfileByUserID(@PathVariable int userID) {
-//        HttpStatus httpStatus = HttpStatus.OK;
-//        FormattedResponse response;
-//        HashMap<String, String> errors = profileValidator.getErrors();
-//
-//        Profile found = profileService.findProfileByUserID(userID);
-//
-//        profileValidator.checkProfile(found);
-//
-//        if (errors.isEmpty()) {
-//
-//            response = new FormattedResponse(httpStatus.value(), true, found);
-//        } else {
-//            httpStatus = HttpStatus.BAD_REQUEST;
-//            response = new ErrorResponse(httpStatus.value(), false, errors);
-//
-//        }
-//        return new ResponseEntity<>(response, httpStatus);
-//    }
+    @GetMapping("/profile/{profileID}")
+    public ResponseEntity<?> getOrderByProfileID(@PathVariable int profileID) {
+        HttpStatus httpStatus = HttpStatus.OK;
+        FormattedResponse response;
+
+        Iterable<Order> found = orderService.findByProfileID(profileID);
+
+        response = new FormattedResponse(httpStatus.value(), true, found);
+        return new ResponseEntity<>(response, httpStatus);
+    }
 
 
 //    @PutMapping("/update/{pk}")
