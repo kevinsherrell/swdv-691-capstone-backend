@@ -21,10 +21,6 @@ public class PhoneNumberController {
 
     @PostMapping("")
     public HttpEntity<?> createNewPhoneNumber(@Valid @RequestBody PhoneNumber phoneNumber, BindingResult result) {
-        int primaryCount = phoneNumberService.countPrimaryPhoneNumbers();
-        if(primaryCount < 1){
-            phoneNumber.setIsPrimary(true);
-        }
 
         PhoneNumber created = phoneNumberService.saveOrUpdatePhoneNumber(phoneNumber);
         FormattedResponse response = new FormattedResponse(HttpStatus.CREATED.value(), true, created);
@@ -39,24 +35,6 @@ public class PhoneNumberController {
         return new HttpEntity<>(response);
     }
 
-    @GetMapping("/profile/{profileID}")
-    public HttpEntity<?> updatePhoneNumberByProfileID(@PathVariable int profileID) {
-        FormattedResponse response;
-
-        PhoneNumberValidator validator = new PhoneNumberValidator();
-
-        Iterable<PhoneNumber> found = phoneNumberService.findPhoneNumbersByProfileID(profileID);
-
-        HashMap<String, String> errors = validator.checkPhoneNumber(found);
-
-        if (errors.isEmpty()) {
-            response = new FormattedResponse(HttpStatus.OK.value(), true, found);
-        } else {
-            response = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), false, errors);
-        }
-
-        return new HttpEntity<>(response);
-    }
     @GetMapping("/{phoneID}")
     public HttpEntity<?> getPhoneNumberByID(@PathVariable int phoneID) {
         PhoneNumber found = phoneNumberService.findPhoneNumberByID(phoneID);
@@ -84,34 +62,28 @@ public class PhoneNumberController {
     }
 
 
-    @PutMapping("/{pk}/makePrimary")
-    public HttpEntity<?> makePrimary(@PathVariable int pk) {
-        PhoneNumber found = phoneNumberService.findPhoneNumberByID(pk);
-        System.out.println(found.toString());
-        FormattedResponse response;
-        PhoneNumberValidator validator =  new PhoneNumberValidator();
-        HashMap<String, String> errors = validator.checkPhoneNumber(found);
-
+//    @PutMapping("/{pk}/makePrimary")
+//    public HttpEntity<?> makePrimary(@PathVariable int pk) {
+//        PhoneNumber found = phoneNumberService.findPhoneNumberByID(pk);
+//        System.out.println(found.toString());
+//        FormattedResponse response;
+//        PhoneNumberValidator validator =  new PhoneNumberValidator();
+//        HashMap<String, String> errors = validator.checkPhoneNumber(found);
 //
-        if (errors.isEmpty()) {
-            found.setIsPrimary(true);
-            PhoneNumber saved = phoneNumberService.saveOrUpdatePhoneNumber(found);
-            response = new FormattedResponse(HttpStatus.CREATED.value(), true, saved);
-
-            // set all user phone numbers isPrimary to false
-            Iterable<PhoneNumber> numbers = phoneNumberService.findPhoneNumbersByProfileID(found.getProfileID());
-            for(PhoneNumber number :  numbers){
-                if(number.getPhoneID() != found.getPhoneID()){
-                    number.setIsPrimary(false);
-                }
-            }
-            phoneNumberService.saveAllPhoneNumbers(numbers);
-        }else{
-            response = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), false, errors);
-        }
-
-
-
-        return new HttpEntity<>(response);
-    }
+////
+//        if (errors.isEmpty()) {
+//            PhoneNumber saved = phoneNumberService.saveOrUpdatePhoneNumber(found);
+//            response = new FormattedResponse(HttpStatus.CREATED.value(), true, saved);
+//
+//            // set all user phone numbers isPrimary to false
+//            Iterable<PhoneNumber> numbers = phoneNumberService.findPhoneNumbersByProfileID(found.getProfileID());
+//            phoneNumberService.saveAllPhoneNumbers(numbers);
+//        }else{
+//            response = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), false, errors);
+//        }
+//
+//
+//
+//        return new HttpEntity<>(response);
+//    }
 }

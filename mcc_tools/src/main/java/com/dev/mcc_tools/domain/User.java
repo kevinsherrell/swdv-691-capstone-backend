@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
@@ -19,6 +20,7 @@ import java.util.Date;
 @Getter
 @Setter
 @ToString
+@RequiredArgsConstructor
 public class User{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,12 +35,15 @@ public class User{
 
     @Column(name = "role_id")
     private int roleID;
+
     @CreationTimestamp(source = SourceType.DB)
     @JsonFormat(pattern = "yyyy-mm-dd HH:mm")
     private Date date_created;
+
     @UpdateTimestamp(source = SourceType.DB)
     @JsonFormat(pattern = "yyyy-mm-dd HH:mm")
     private Date date_updated;
+
 
     @OneToOne
     @JoinColumn(name = "role_id", referencedColumnName = "role_id", insertable = false, updatable = false)
@@ -49,30 +54,4 @@ public class User{
     @JsonIgnore
     private Profile profile;
 
-    public User(int userID, String email, String password, int roleID) {
-        this.userID = userID;
-        this.email = email;
-        this.password = password;
-        this.roleID = roleID;
-    }
-
-    public User(int userID, String email, int roleID){
-        this.userID = userID;
-        this.email = email;
-        this.roleID = roleID;
-    }
-    public User(String email, String password, int roleID) {
-        this.email = email;
-        this.password = password;
-        this.roleID = roleID;
-    }
-
-    public User(String email, int roleID){
-        this.email = email;
-        this.roleID = roleID;
-    }
-
-    public User(){
-
-    }
 }

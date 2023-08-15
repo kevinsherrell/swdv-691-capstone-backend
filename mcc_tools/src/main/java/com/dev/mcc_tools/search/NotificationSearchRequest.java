@@ -1,4 +1,4 @@
-package com.dev.mcc_tools.respositories;
+package com.dev.mcc_tools.search;
 
 import lombok.Getter;
 import lombok.Setter;

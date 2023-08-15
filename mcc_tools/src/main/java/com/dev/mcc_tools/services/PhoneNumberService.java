@@ -28,17 +28,8 @@ public class PhoneNumberService {
     }
 
     public PhoneNumber findPhoneNumberByID(int phoneID) {
-
         return phoneNumberRepository.findByPhoneID(phoneID);
-
-
     }
 
-    public Iterable<PhoneNumber> findPhoneNumbersByProfileID(int profileID) {
-        return phoneNumberRepository.findByProfileID(profileID);
-    }
 
-    public int countPrimaryPhoneNumbers (){
-        return phoneNumberRepository.countPrimary();
-    }
 };

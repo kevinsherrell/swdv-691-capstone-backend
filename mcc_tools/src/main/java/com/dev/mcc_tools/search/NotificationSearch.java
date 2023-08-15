@@ -1,4 +1,4 @@
-package com.dev.mcc_tools.respositories;
+package com.dev.mcc_tools.search;
 
 import com.dev.mcc_tools.domain.Notification;
 import jakarta.persistence.EntityManager;

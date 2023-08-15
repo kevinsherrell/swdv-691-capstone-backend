@@ -1,6 +1,5 @@
-package com.dev.mcc_tools.respositories;
+package com.dev.mcc_tools.search;
 
-import com.dev.mcc_tools.domain.Notification;
 import com.dev.mcc_tools.domain.User;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
@@ -8,7 +7,6 @@ import jakarta.persistence.criteria.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 

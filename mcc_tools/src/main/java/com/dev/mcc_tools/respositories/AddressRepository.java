@@ -1,5 +1,6 @@
 package com.dev.mcc_tools.respositories;
 
+import com.dev.mcc_tools.domain.Address;
 import com.dev.mcc_tools.domain.PhoneNumber;
 import com.dev.mcc_tools.domain.Profile;
 import com.dev.mcc_tools.domain.User;
@@ -10,7 +11,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface PhoneNumberRepository extends CrudRepository<PhoneNumber, Integer> {
-    Iterable<PhoneNumber> findAll();
-    PhoneNumber findByPhoneID(int phoneID);
+public interface AddressRepository extends CrudRepository<Address, Integer> {
+    Iterable<Address> findAll();
+    Address findByAddressID(int addressID);
 }
