@@ -14,6 +14,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.Format;
+import java.text.ParseException;
 import java.util.HashMap;
 
 @RestController
@@ -63,8 +64,10 @@ public class OrderController {
             @RequestParam(required = false, name = "status") String status,
             @RequestParam(required = false, name = "firstName") String firstName,
             @RequestParam(required = false, name = "lastName") String lastName,
-            @RequestParam(required = false, name = "email") String email
-    ) {
+            @RequestParam(required = false, name = "email") String email,
+            @RequestParam(required = false, name = "minDate") String minDate,
+            @RequestParam(required = false, name = "maxDate") String maxDate
+    ) throws ParseException {
         HttpStatus httpStatus = HttpStatus.OK;
         FormattedResponse response;
 
@@ -76,7 +79,8 @@ public class OrderController {
         if (firstName != null) request.setFirstName(firstName);
         if (lastName != null) request.setLastName(lastName);
         if (email != null) request.setEmail(email);
-
+        if (minDate != null) request.setMinDate(minDate);
+        if (maxDate != null) request.setMaxDate(maxDate);
 
 
         Iterable<Order> found = orderSearch.findAllByCriteria(request);

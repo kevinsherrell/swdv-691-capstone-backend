@@ -41,11 +41,11 @@ public class Order{
     private int profileID;
 
     @CreationTimestamp(source = SourceType.DB)
-    @JsonFormat(pattern = "yyyy-mm-dd HH:mm")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private Date date_created;
 
     @UpdateTimestamp(source = SourceType.DB)
-    @JsonFormat(pattern = "yyyy-mm-dd HH:mm")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private Date date_updated;
 
     @ManyToOne
