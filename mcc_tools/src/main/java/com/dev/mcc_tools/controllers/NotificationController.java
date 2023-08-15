@@ -1,8 +1,8 @@
 package com.dev.mcc_tools.controllers;
 
 import com.dev.mcc_tools.domain.Notification;
-import com.dev.mcc_tools.respositories.NotificationSearch;
-import com.dev.mcc_tools.respositories.NotificationSearchRequest;
+import com.dev.mcc_tools.search.NotificationSearch;
+import com.dev.mcc_tools.search.NotificationSearchRequest;
 import com.dev.mcc_tools.services.NotificationService;
 import com.dev.mcc_tools.validation.NotificationValidator;
 import jakarta.validation.Valid;

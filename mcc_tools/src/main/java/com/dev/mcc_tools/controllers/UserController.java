@@ -1,22 +1,17 @@
 package com.dev.mcc_tools.controllers;
 
 import com.dev.mcc_tools.domain.User;
-import com.dev.mcc_tools.respositories.UserSearch;
-import com.dev.mcc_tools.respositories.UserSearchRequest;
+import com.dev.mcc_tools.search.UserSearch;
+import com.dev.mcc_tools.search.UserSearchRequest;
 import com.dev.mcc_tools.services.UserService;
-import com.dev.mcc_tools.validation.MccValidator;
 import com.dev.mcc_tools.validation.UserValidator;
 import jakarta.validation.Valid;
-import org.apache.coyote.Response;
-import org.apache.tomcat.util.http.parser.HttpParser;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.Format;
 import java.util.HashMap;
 import java.util.Map;
 

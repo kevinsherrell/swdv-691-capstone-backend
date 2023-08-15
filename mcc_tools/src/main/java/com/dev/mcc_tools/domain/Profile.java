@@ -1,9 +1,13 @@
 package com.dev.mcc_tools.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SourceType;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -14,196 +18,59 @@ import java.util.List;
 
 @Entity
 @Table(name = "profiles")
+@Getter
+@Setter
+@RequiredArgsConstructor
 public class Profile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "profile_id")
     private int profileID;
+
     @NotBlank
     @Column(name = "first_name")
     private String firstName;
+
     @Column(name = "middle_initial")
     private String middleInitial;
+
     @NotBlank
     @Column(name = "last_name")
     private String lastName;
+
     @NotNull
-    @Column(name = "user_id")
+    @Column(name = "user_id", unique = true)
     private int userID;
+
+    @CreationTimestamp(source = SourceType.DB)
+    @JsonFormat(pattern = "yyyy-mm-dd HH:mm")
+    private Date date_created;
+
+    @UpdateTimestamp(source = SourceType.DB)
+    @JsonFormat(pattern = "yyyy-mm-dd HH:mm")
+    private Date date_updated;
 
     @OneToOne
     @JoinColumn(name = "user_id", referencedColumnName = "user_id", insertable = false, updatable = false)
     private User user;
-    @OneToMany
+
+    @OneToOne
     @JoinColumn(name = "profile_id", referencedColumnName = "profile_id", insertable = false, updatable = false)
-    private List<PhoneNumber> phoneNumbers;
+    private PhoneNumber phoneNumber;
     @OneToMany
     @JoinColumn(name = "profile_id", referencedColumnName = "profile_id", insertable = false, updatable = false)
     private List<Order> orders;
     @OneToMany
     @JoinColumn(name = "profile_id", referencedColumnName = "profile_id", insertable = false, updatable = false)
     private List<Appointment> appointments;
-    @OneToMany
+
+    @OneToOne
     @JoinColumn(name = "profile_id", referencedColumnName = "profile_id", insertable = false, updatable = false)
-    private List<Address> addresses;
+    private Address address;
     @OneToMany
     @JoinColumn(name = "profile_id", referencedColumnName = "profile_id", insertable = false, updatable = false)
     private List<Notification> notifications;
 
-    @CreationTimestamp(source = SourceType.DB)
-    @JsonFormat(pattern = "yyyy-mm-dd HH:mm")
-    private Date date_created;
-    @UpdateTimestamp(source = SourceType.DB)
-    @JsonFormat(pattern = "yyyy-mm-dd HH:mm")
-    private Date date_updated;
 
 
-    @PrePersist
-    protected void onCreate() {
-        this.date_created = new Date();
-    }
-
-    @PreUpdate
-    protected void onUpdate() {
-        this.date_updated = new Date();
-    }
-
-    public Profile(int profileID, String firstName, String middleInitial, String lastName, int userID, Date date_created, Date date_updated) {
-        this.profileID = profileID;
-        this.firstName = firstName;
-        this.middleInitial = middleInitial;
-        this.lastName = lastName;
-        this.userID = userID;
-        this.date_created = date_created;
-        this.date_updated = date_updated;
-    }
-
-    public Profile(int profileID, String firstName, String lastName, int userID) {
-        this.profileID = profileID;
-        this.firstName = firstName;
-        this.middleInitial = "none";
-        this.lastName = lastName;
-        this.userID = userID;
-
-    }
-
-    public Profile() {
-    }
-
-    public int getProfileID() {
-        return profileID;
-    }
-
-    public void setProfileID(int profileID) {
-        this.profileID = profileID;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getMiddleInitial() {
-        return middleInitial;
-    }
-
-    public void setMiddleInitial(String middleInitial) {
-        this.middleInitial = middleInitial;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public int getUserID() {
-        return userID;
-    }
-
-    public void setUserID(int userID) {
-        this.userID = userID;
-    }
-
-    public Date getDate_created() {
-        return date_created;
-    }
-
-    public void setDate_created(Date date_created) {
-        this.date_created = date_created;
-    }
-
-    public Date getDate_updated() {
-        return date_updated;
-    }
-
-    public void setDate_updated(Date date_updated) {
-        this.date_updated = date_updated;
-    }
-
-    public List<PhoneNumber> getPhoneNumbers() {
-        return phoneNumbers;
-    }
-
-    public void setPhoneNumbers(List<PhoneNumber> phoneNumbers) {
-        this.phoneNumbers = phoneNumbers;
-    }
-
-    public List<Order> getOrders() {
-        return orders;
-    }
-
-    public void setOrders(List<Order> orders) {
-        this.orders = orders;
-    }
-
-    public List<Appointment> getAppointments() {
-        return appointments;
-    }
-
-    public void setAppointments(List<Appointment> appointments) {
-        this.appointments = appointments;
-    }
-
-    public List<Address> getAddresses() {
-        return addresses;
-    }
-
-    public void setAddresses(List<Address> addresses) {
-        this.addresses = addresses;
-    }
-
-    public List<Notification> getNotifications() {
-        return notifications;
-    }
-
-    public void setNotifications(List<Notification> notifications) {
-        this.notifications = notifications;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    @Override
-    public String toString() {
-        return "Profile{" +
-                "profileID=" + profileID +
-                ", firstName='" + firstName + '\'' +
-                ", middleInitial='" + middleInitial + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", userID=" + userID +
-                ", date_created=" + date_created +
-                ", date_updated=" + date_updated +
-                '}';
-    }
 }
