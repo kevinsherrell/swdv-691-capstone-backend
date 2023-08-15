@@ -1,6 +1,7 @@
 package com.dev.mcc_tools.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -47,5 +48,8 @@ public class Order{
     @JsonFormat(pattern = "yyyy-mm-dd HH:mm")
     private Date date_updated;
 
-
+    @ManyToOne
+    @JoinColumn(name = "profile_id", referencedColumnName = "profile_id", insertable = false, updatable = false)
+    @JsonIgnore
+    private Profile profile;
 }
