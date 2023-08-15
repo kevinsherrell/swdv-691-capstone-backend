@@ -46,14 +46,14 @@ public class OrderController {
         return new ResponseEntity<>(response, httpStatus);
     }
 
-//    @GetMapping("")
-//    public ResponseEntity<?> getAllProfiles() {
-//        HttpStatus httpStatus = HttpStatus.OK;
-//
-//        Iterable<Profile> found = profileService.findAllProfiles();
-//        FormattedResponse response = new FormattedResponse(httpStatus.value(), true, found);
-//        return new ResponseEntity<>(response, httpStatus);
-//    }
+    @GetMapping("")
+    public ResponseEntity<?> getAllOrders() {
+        HttpStatus httpStatus = HttpStatus.OK;
+
+        Iterable<Order> found = orderService.findAllOrders();
+        FormattedResponse response = new FormattedResponse(httpStatus.value(), true, found);
+        return new ResponseEntity<>(response, httpStatus);
+    }
 
 //    @GetMapping("/search")
 //    public ResponseEntity<?> profileSearch(
