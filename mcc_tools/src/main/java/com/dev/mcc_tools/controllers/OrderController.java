@@ -3,6 +3,7 @@ package com.dev.mcc_tools.controllers;
 import com.dev.mcc_tools.domain.Order;
 import com.dev.mcc_tools.domain.Profile;
 import com.dev.mcc_tools.services.OrderService;
+import com.dev.mcc_tools.validation.OrderValidator;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,14 +23,26 @@ public class OrderController {
 //    @Autowired
 //    private OrderSearch orderSearch;
 
-//    private final OrderValidator orderValidator = new OrderValidator();
+    private final OrderValidator orderValidator = new OrderValidator();
 
     @PostMapping("")
     public ResponseEntity<?> createNewOrder(@Valid @RequestBody Order order, BindingResult result) {
-        HttpStatus httpStatus = HttpStatus.CREATED;
+        orderValidator.initializeErrors();
 
-        Order created = orderService.saveOrUpdateOrder(order);
-        FormattedResponse response = new FormattedResponse(httpStatus.value(), true, created);
+
+        HttpStatus httpStatus = HttpStatus.CREATED;
+        FormattedResponse response;
+        HashMap<String, String> errors = orderValidator.getErrors();
+
+        orderValidator.checkOrderFormat(order);
+
+        if (errors.isEmpty()) {
+            Order created = orderService.saveOrUpdateOrder(order);
+            response = new FormattedResponse(httpStatus.value(), true, created);
+        } else {
+            httpStatus = HttpStatus.BAD_REQUEST;
+            response = new ErrorResponse(httpStatus.value(), false, errors);
+        }
         return new ResponseEntity<>(response, httpStatus);
     }
 
