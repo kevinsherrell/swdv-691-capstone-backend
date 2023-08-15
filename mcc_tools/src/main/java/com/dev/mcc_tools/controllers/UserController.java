@@ -119,7 +119,7 @@ public class UserController {
 
         User found = userService.findUserById(pk);
 
-
+        userValidator.checkIDMatch(pk, user.getUserID());
         userValidator.checkUserForUpdate(found);
 
         if (errors.isEmpty()) {

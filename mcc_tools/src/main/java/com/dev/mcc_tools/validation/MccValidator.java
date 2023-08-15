@@ -29,12 +29,17 @@ public class MccValidator {
 
     public void nullCheck(String objectName, Object object){
         if(object == null){
-            setErrors(objectName, objectName + " not found");
+            setErrors(objectName, objectName + " not found or does not exist");
         }
     }
     public void emptyCheck(String objectName, Iterable<Object> objects){
         if(!objects.iterator().hasNext()){
-            setErrors(objectName, objectName + " not found");
+            setErrors(objectName, objectName + " not found or does not exist");
+        }
+    }
+    public void checkIDMatch(int pk, int requestObjID){
+        if(pk != requestObjID){
+            setErrors("id mismatch", "Id in path and request body do not match. Change the id in the url path");
         }
     }
 }
