@@ -101,24 +101,42 @@ public class OrderController {
     }
 
 
-//    @PutMapping("/update/{pk}")
-//    public ResponseEntity<?> updateProfile(@PathVariable int pk, @RequestBody Profile profile) {
-//        HttpStatus httpStatus = HttpStatus.CREATED;
-//        FormattedResponse response;
-//        HashMap<String, String> errors = profileValidator.getErrors();
-//
-//        Profile found = profileService.findProfileById(pk);
-//
-//        profileValidator.checkProfile(found);
-//
-//        if (errors.isEmpty()) {
-//            Profile updated = profileService.saveOrUpdateProfile(profile);
-//            response = new FormattedResponse(httpStatus.value(), true, updated);
-//        } else {
-//            httpStatus = HttpStatus.BAD_REQUEST;
-//            response = new ErrorResponse(httpStatus.value(), false, errors);
-//        }
-//
-//        return new ResponseEntity<>(response, httpStatus);
-//    }
+    @PutMapping("/update/{pk}")
+    public ResponseEntity<?> updateOrder(@PathVariable int pk, @RequestBody Order order) {
+        orderValidator.initializeErrors();
+
+        HttpStatus httpStatus = HttpStatus.CREATED;
+        FormattedResponse response;
+        HashMap<String, String> errors = orderValidator.getErrors();
+
+        Order found = orderService.findOrderById(pk);
+        System.out.println(found.getOrderID());
+
+        // checks if the order id matches the id given in the path variable
+        orderValidator.checkIDMatch(pk, order.getOrderID());
+        // checks if the order exists in the database
+        orderValidator.nullCheck("Order",found);
+        // checks if the order fields are formatted correctly
+        orderValidator.checkOrderFormat(order);
+
+
+        if (errors.isEmpty()) {
+            // protects these values from being changed on frontend
+            order.setOrderID(found.getOrderID());
+            order.setDate_created(found.getDate_created());
+            order.setProfileID(found.getProfileID());
+
+            if(!order.getInvoiceNumber().equals(found.getInvoiceNumber())) found.setInvoiceNumber(order.getInvoiceNumber());
+            if(!order.getStatus().equals(found.getStatus())) found.setStatus(order.getStatus());
+            if(!order.getLocation().equals(found.getLocation())) found.setLocation(order.getLocation());
+
+            Order updated = orderService.saveOrUpdateOrder(found);
+            response = new FormattedResponse(httpStatus.value(), true, updated);
+        } else {
+            httpStatus = HttpStatus.BAD_REQUEST;
+            response = new ErrorResponse(httpStatus.value(), false, errors);
+        }
+
+        return new ResponseEntity<>(response, httpStatus);
+    }
 }
