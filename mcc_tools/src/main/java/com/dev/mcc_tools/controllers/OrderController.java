@@ -2,6 +2,8 @@ package com.dev.mcc_tools.controllers;
 
 import com.dev.mcc_tools.domain.Order;
 import com.dev.mcc_tools.domain.Profile;
+import com.dev.mcc_tools.search.OrderSearch;
+import com.dev.mcc_tools.search.OrderSearchRequest;
 import com.dev.mcc_tools.services.OrderService;
 import com.dev.mcc_tools.validation.OrderValidator;
 import jakarta.validation.Valid;
@@ -12,6 +14,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.Format;
+import java.text.ParseException;
 import java.util.HashMap;
 
 @RestController
@@ -20,8 +23,8 @@ import java.util.HashMap;
 public class OrderController {
     @Autowired
     private OrderService orderService;
-//    @Autowired
-//    private OrderSearch orderSearch;
+    @Autowired
+    private OrderSearch orderSearch;
 
     private final OrderValidator orderValidator = new OrderValidator();
 
@@ -55,30 +58,35 @@ public class OrderController {
         return new ResponseEntity<>(response, httpStatus);
     }
 
-//    @GetMapping("/search")
-//    public ResponseEntity<?> profileSearch(
-//            @RequestParam(required = false, name = "firstName") String firstName,
-//            @RequestParam(required = false, name = "lastName") String lastName,
-//            @RequestParam(required = false, name = "phoneNumber") String phoneNumber,
-//            @RequestParam(required = false, name = "email") String email
-//    ) {
-//        ProfileSearchRequest request = new ProfileSearchRequest();
-//
-//
-//        if (firstName != null) request.setFirstName(firstName);
-//        if (lastName != null) request.setLastName(lastName);
-//        if (phoneNumber != null) request.setPhoneNumber(phoneNumber);
-//        if (email != null) request.setEmail(email);
-//
-//        System.out.println(request.getFirstName());
-//        System.out.println(request.getEmail());
-//        HttpStatus httpStatus = HttpStatus.OK;
-//        FormattedResponse response;
-//
-//        Iterable<Profile> found = profileSearch.findAllByCriteria(request);
-//        response = new FormattedResponse(httpStatus.value(), true, found);
-//        return new ResponseEntity<>(response, httpStatus);
-//    }
+    @GetMapping("/search")
+    public ResponseEntity<?> OrderSearch(
+            @RequestParam(required = false, name = "invoiceNumber") String invoiceNumber,
+            @RequestParam(required = false, name = "status") String status,
+            @RequestParam(required = false, name = "firstName") String firstName,
+            @RequestParam(required = false, name = "lastName") String lastName,
+            @RequestParam(required = false, name = "email") String email,
+            @RequestParam(required = false, name = "minDate") String minDate,
+            @RequestParam(required = false, name = "maxDate") String maxDate
+    ) throws ParseException {
+        HttpStatus httpStatus = HttpStatus.OK;
+        FormattedResponse response;
+
+        OrderSearchRequest request = new OrderSearchRequest();
+
+
+        if (invoiceNumber != null) request.setInvoiceNumber(invoiceNumber);
+        if (status != null) request.setStatus(status);
+        if (firstName != null) request.setFirstName(firstName);
+        if (lastName != null) request.setLastName(lastName);
+        if (email != null) request.setEmail(email);
+        if (minDate != null) request.setMinDate(minDate);
+        if (maxDate != null) request.setMaxDate(maxDate);
+
+
+        Iterable<Order> found = orderSearch.findAllByCriteria(request);
+        response = new FormattedResponse(httpStatus.value(), true, found);
+        return new ResponseEntity<>(response, httpStatus);
+    }
 
     @GetMapping("/{pk}")
     public ResponseEntity<?> getOrderByID(@PathVariable int pk) {
