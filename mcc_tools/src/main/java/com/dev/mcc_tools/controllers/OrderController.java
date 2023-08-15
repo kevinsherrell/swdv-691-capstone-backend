@@ -80,14 +80,14 @@ public class OrderController {
 //        return new ResponseEntity<>(response, httpStatus);
 //    }
 
-//    @GetMapping("/{pk}")
-//    public ResponseEntity<?> getProfileByID(@PathVariable int pk) {
-//        HttpStatus httpStatus = HttpStatus.OK;
-//
-//        Profile found = profileService.findProfileById(pk);
-//        FormattedResponse response = new FormattedResponse(httpStatus.value(), true, found);
-//        return new ResponseEntity<>(response, httpStatus);
-//    }
+    @GetMapping("/{pk}")
+    public ResponseEntity<?> getOrderByID(@PathVariable int pk) {
+        HttpStatus httpStatus = HttpStatus.OK;
+
+        Order found = orderService.findOrderById(pk);
+        FormattedResponse response = new FormattedResponse(httpStatus.value(), true, found);
+        return new ResponseEntity<>(response, httpStatus);
+    }
 
 //    @GetMapping("/user/{userID}")
 //    public ResponseEntity<?> getProfileByUserID(@PathVariable int userID) {
