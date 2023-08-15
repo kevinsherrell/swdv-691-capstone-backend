@@ -11,5 +11,5 @@ import java.util.List;
 public interface OrderRepository extends CrudRepository<Order, Integer> {
     Iterable<Order> findAll();
     Order findById(int id);
-    Order findOrderByProfileID(int userID);
+    Iterable<Order> findOrderByProfileID(int userID);
 }
