@@ -115,7 +115,7 @@ public class OrderController {
         // checks if the order id matches the id given in the path variable
         orderValidator.checkIDMatch(pk, order.getOrderID());
         // checks if the order exists in the database
-        orderValidator.nullCheck("Order",found);
+        orderValidator.nullCheck("Order", found);
         // checks if the order fields are formatted correctly
         orderValidator.checkOrderFormat(order);
 
@@ -126,9 +126,10 @@ public class OrderController {
             order.setDate_created(found.getDate_created());
             order.setProfileID(found.getProfileID());
 
-            if(!order.getInvoiceNumber().equals(found.getInvoiceNumber())) found.setInvoiceNumber(order.getInvoiceNumber());
-            if(!order.getStatus().equals(found.getStatus())) found.setStatus(order.getStatus());
-            if(!order.getLocation().equals(found.getLocation())) found.setLocation(order.getLocation());
+            if (!order.getInvoiceNumber().equals(found.getInvoiceNumber()))
+                found.setInvoiceNumber(order.getInvoiceNumber());
+            if (!order.getStatus().equals(found.getStatus())) found.setStatus(order.getStatus());
+            if (!order.getLocation().equals(found.getLocation())) found.setLocation(order.getLocation());
 
             Order updated = orderService.saveOrUpdateOrder(found);
             response = new FormattedResponse(httpStatus.value(), true, updated);
@@ -139,4 +140,30 @@ public class OrderController {
 
         return new ResponseEntity<>(response, httpStatus);
     }
+
+    @PutMapping("/{pk}/update_status/{status}")
+    public ResponseEntity<?> updateStatus(@PathVariable int pk, @PathVariable String status) {
+        orderValidator.initializeErrors();
+
+        HttpStatus httpStatus = HttpStatus.CREATED;
+        FormattedResponse response;
+
+        HashMap<String, String> errors = orderValidator.getErrors();
+
+        Order found = orderService.findOrderById(pk);
+
+        orderValidator.checkStatus(status);
+        orderValidator.nullCheck("Order", found);
+
+        if (errors.isEmpty()) {
+            found.setStatus(status);
+            orderService.saveOrUpdateOrder(found);
+            response = new FormattedResponse(httpStatus.value(), true, found);
+        } else {
+            httpStatus = HttpStatus.BAD_REQUEST;
+            response = new ErrorResponse(httpStatus.value(), false, errors);
+        }
+        return new ResponseEntity<>(response, httpStatus);
+    }
+
 }
