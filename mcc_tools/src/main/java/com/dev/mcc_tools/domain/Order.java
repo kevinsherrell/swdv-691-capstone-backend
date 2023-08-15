@@ -3,6 +3,7 @@ package com.dev.mcc_tools.domain;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SourceType;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -26,7 +27,7 @@ public class Order{
     @NotBlank
     private String location;
 
-    @NotBlank
+    @NotNull
     @Column(name = "profile_id")
     private int profileID;
 

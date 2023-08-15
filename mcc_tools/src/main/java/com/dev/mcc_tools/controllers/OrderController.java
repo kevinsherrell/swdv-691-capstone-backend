@@ -1,18 +1,10 @@
 package com.dev.mcc_tools.controllers;
 
+import com.dev.mcc_tools.domain.Order;
 import com.dev.mcc_tools.domain.Profile;
-import com.dev.mcc_tools.domain.User;
-import com.dev.mcc_tools.search.ProfileSearch;
-import com.dev.mcc_tools.search.ProfileSearchRequest;
-import com.dev.mcc_tools.search.UserSearchRequest;
 import com.dev.mcc_tools.services.OrderService;
-import com.dev.mcc_tools.services.ProfileService;
-import com.dev.mcc_tools.validation.MccValidator;
-import com.dev.mcc_tools.validation.OrderValidator;
-import com.dev.mcc_tools.validation.ProfileValidator;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -22,7 +14,7 @@ import java.text.Format;
 import java.util.HashMap;
 
 @RestController
-@RequestMapping("/profile")
+@RequestMapping("/order")
 @CrossOrigin
 public class OrderController {
     @Autowired
@@ -32,14 +24,14 @@ public class OrderController {
 
 //    private final OrderValidator orderValidator = new OrderValidator();
 
-//    @PostMapping("")
-//    public ResponseEntity<?> createNewProfile(@Valid @RequestBody Profile profile, BindingResult result) {
-//        HttpStatus httpStatus = HttpStatus.CREATED;
-//
-//        Profile created = profileService.saveOrUpdateProfile(profile);
-//        FormattedResponse response = new FormattedResponse(httpStatus.value(), true, created);
-//        return new ResponseEntity<>(response, httpStatus);
-//    }
+    @PostMapping("")
+    public ResponseEntity<?> createNewOrder(@Valid @RequestBody Order order, BindingResult result) {
+        HttpStatus httpStatus = HttpStatus.CREATED;
+
+        Order created = orderService.saveOrUpdateOrder(order);
+        FormattedResponse response = new FormattedResponse(httpStatus.value(), true, created);
+        return new ResponseEntity<>(response, httpStatus);
+    }
 
 //    @GetMapping("")
 //    public ResponseEntity<?> getAllProfiles() {
@@ -73,7 +65,7 @@ public class OrderController {
 //        Iterable<Profile> found = profileSearch.findAllByCriteria(request);
 //        response = new FormattedResponse(httpStatus.value(), true, found);
 //        return new ResponseEntity<>(response, httpStatus);
-    }
+//    }
 
 //    @GetMapping("/{pk}")
 //    public ResponseEntity<?> getProfileByID(@PathVariable int pk) {
