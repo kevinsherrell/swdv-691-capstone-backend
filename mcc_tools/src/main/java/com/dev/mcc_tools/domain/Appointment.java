@@ -1,6 +1,7 @@
 package com.dev.mcc_tools.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
@@ -65,4 +66,9 @@ public class Appointment {
     @OneToMany
     @JoinColumn(name = "order_id", referencedColumnName = "order_id", insertable = false, updatable = false)
     private List<Order> orders;
+
+    @ManyToOne
+    @JoinColumn(name = "profile_id", referencedColumnName = "profile_id", insertable = false, updatable = false)
+    @JsonIgnore
+    private Profile profile;
 }

@@ -2,6 +2,9 @@ package com.dev.mcc_tools.controllers;
 
 import com.dev.mcc_tools.domain.Appointment;
 import com.dev.mcc_tools.domain.Order;
+import com.dev.mcc_tools.search.AppointmentSearch;
+import com.dev.mcc_tools.search.AppointmentSearchRequest;
+import com.dev.mcc_tools.search.OrderSearchRequest;
 import com.dev.mcc_tools.services.AppointmentService;
 import com.dev.mcc_tools.validation.AppointmentValidator;
 import jakarta.validation.Valid;
@@ -11,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
@@ -21,11 +25,40 @@ import java.util.HashMap;
 public class AppointmentController {
     @Autowired
     private AppointmentService appointmentService;
-//    @Autowired
-//    private AppointmentSearch appointmentSearch;
+    @Autowired
+    private AppointmentSearch appointmentSearch;
 
     private final AppointmentValidator appointmentValidator = new AppointmentValidator();
 
+
+    @GetMapping("/search")
+    public ResponseEntity<?> AppointmentSearch(
+            @RequestParam(required= false, name = "firstName") String firstName,
+            @RequestParam(required = false, name = "lastName") String lastName,
+            @RequestParam(required = false, name = "status") String status,
+            @RequestParam(required = false, name = "minDate") String minDate,
+            @RequestParam(required = false, name = "maxDate") String maxDate,
+            @RequestParam(required = false, name = "invoiceNumber") String invoiceNumber,
+            @RequestParam(required = false, name = "location") String location
+    ) throws ParseException {
+        HttpStatus httpStatus = HttpStatus.OK;
+        FormattedResponse response;
+
+        AppointmentSearchRequest request = new AppointmentSearchRequest();
+
+        if(location != null) request.setLocation(location);
+        if(firstName != null) request.setFirstName(firstName);
+        if(lastName != null) request.setLastName(lastName);
+        if (status != null) request.setStatus(status);
+        if (minDate != null) request.setMinDate(minDate);
+        if (maxDate != null) request.setMaxDate(maxDate);
+        if (invoiceNumber != null) request.setInvoiceNumber(invoiceNumber);
+
+
+        Iterable<Appointment> found = appointmentSearch.findAllByCriteria(request);
+        response = new FormattedResponse(httpStatus.value(), true, found);
+        return new ResponseEntity<>(response, httpStatus);
+    }
 
     @PostMapping("")
     public ResponseEntity<?> createAppointment(@Valid @RequestBody Appointment appointment) {
