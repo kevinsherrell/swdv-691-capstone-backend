@@ -32,7 +32,7 @@ public class MccValidator {
             setErrors(objectName, objectName + " not found or does not exist");
         }
     }
-    public void emptyCheck(String objectName, Iterable<Object> objects){
+    public void emptyCheck(String objectName, Iterable<?> objects){
         if(!objects.iterator().hasNext()){
             setErrors(objectName, objectName + " not found or does not exist");
         }
