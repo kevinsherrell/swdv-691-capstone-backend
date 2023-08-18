@@ -15,8 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
-import java.time.*;
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 
 @RestController
@@ -33,7 +31,7 @@ public class AppointmentController {
 
     @GetMapping("/search")
     public ResponseEntity<?> AppointmentSearch(
-            @RequestParam(required= false, name = "firstName") String firstName,
+            @RequestParam(required = false, name = "firstName") String firstName,
             @RequestParam(required = false, name = "lastName") String lastName,
             @RequestParam(required = false, name = "status") String status,
             @RequestParam(required = false, name = "minDate") String minDate,
@@ -46,9 +44,9 @@ public class AppointmentController {
 
         AppointmentSearchRequest request = new AppointmentSearchRequest();
 
-        if(location != null) request.setLocation(location);
-        if(firstName != null) request.setFirstName(firstName);
-        if(lastName != null) request.setLastName(lastName);
+        if (location != null) request.setLocation(location);
+        if (firstName != null) request.setFirstName(firstName);
+        if (lastName != null) request.setLastName(lastName);
         if (status != null) request.setStatus(status);
         if (minDate != null) request.setMinDate(minDate);
         if (maxDate != null) request.setMaxDate(maxDate);

@@ -38,43 +38,43 @@ public class AppointmentSearch {
                     fnameP
             );
         }
-            if (request.getLastName() != null) {
-                Predicate lnameP = builder
-                        .like(builder.lower(profile.get("lastName")), ("%" + request.getLastName() + "%").toLowerCase());
-                predicates.add(
-                        lnameP
-                );
-            }
-            if ((request.getStatus()) != null) {
-                Predicate statusP = builder
-                        .equal(root.get("status"), request.getStatus());
-                predicates.add(statusP);
-            }
-//
-            if (request.getInvoiceNumber() != null) {
-                Predicate invoiceP = builder
-                        .like(order.get("invoiceNumber"), "%" + request.getInvoiceNumber() + "%");
-                predicates.add(invoiceP);
-            }
-
-            if (request.getMinDate() != null) {
-                Predicate mDateP = builder
-                        .greaterThanOrEqualTo(root.get("date_created"), request.parseDateString(request.getMinDate()));
-                datePredicates.add(mDateP);
-            }
-            if (request.getMaxDate() != null) {
-
-                Predicate maxDateP = builder
-                        .lessThanOrEqualTo(root.get("date_created"), request.parseDateString(request.getMaxDate()));
-                datePredicates.add(maxDateP);
-            }
-            // final query
-            query.where(
-                    builder.or(predicates.toArray(new Predicate[0])),
-                    builder.and(datePredicates.toArray(new Predicate[0]))
+        if (request.getLastName() != null) {
+            Predicate lnameP = builder
+                    .like(builder.lower(profile.get("lastName")), ("%" + request.getLastName() + "%").toLowerCase());
+            predicates.add(
+                    lnameP
             );
-
-            TypedQuery<Appointment> typedQuery = entityManager.createQuery(query);
-            return typedQuery.getResultList();
         }
+        if ((request.getStatus()) != null) {
+            Predicate statusP = builder
+                    .equal(root.get("status"), request.getStatus());
+            predicates.add(statusP);
+        }
+//
+        if (request.getInvoiceNumber() != null) {
+            Predicate invoiceP = builder
+                    .like(order.get("invoiceNumber"), "%" + request.getInvoiceNumber() + "%");
+            predicates.add(invoiceP);
+        }
+
+        if (request.getMinDate() != null) {
+            Predicate mDateP = builder
+                    .greaterThanOrEqualTo(root.get("date_created"), request.parseDateString(request.getMinDate()));
+            datePredicates.add(mDateP);
+        }
+        if (request.getMaxDate() != null) {
+
+            Predicate maxDateP = builder
+                    .lessThanOrEqualTo(root.get("date_created"), request.parseDateString(request.getMaxDate()));
+            datePredicates.add(maxDateP);
+        }
+        // final query
+        query.where(
+                builder.or(predicates.toArray(new Predicate[0])),
+                builder.and(datePredicates.toArray(new Predicate[0]))
+        );
+
+        TypedQuery<Appointment> typedQuery = entityManager.createQuery(query);
+        return typedQuery.getResultList();
+    }
 }
