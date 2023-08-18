@@ -2,9 +2,7 @@ package com.dev.mcc_tools;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
 import java.util.TimeZone;
-
 @SpringBootApplication
 public class MccToolsApplication {
 
@@ -13,5 +11,6 @@ public class MccToolsApplication {
 		SpringApplication.run(MccToolsApplication.class, args
 		);
 	}
+
 
 }

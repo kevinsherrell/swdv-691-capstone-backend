@@ -25,7 +25,6 @@ public class UserController {
     private UserSearch userSearch;
     private final UserValidator userValidator = new UserValidator();
 
-
     @PostMapping("")
     public ResponseEntity<?> createNewUser(@Valid @RequestBody User user, BindingResult result) {
         HttpStatus httpStatus = HttpStatus.CREATED;
