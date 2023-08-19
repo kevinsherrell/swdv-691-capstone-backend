@@ -13,7 +13,7 @@ import java.time.format.DateTimeFormatter;
 @Setter
 public class UserSearchRequest {
 
-    private Integer roleID;
+    private String role;
     private String email;
 
 }

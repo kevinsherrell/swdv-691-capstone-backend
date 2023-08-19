@@ -54,14 +54,14 @@ public class UserController {
 
     @GetMapping("/search")
     public ResponseEntity<?> userSearch(
-            @RequestParam(required = false, name = "roleID") Integer roleID,
+            @RequestParam(required = false, name = "role") String role,
             @RequestParam(required = false, name = "email") String email
     ) {
         UserSearchRequest request = new UserSearchRequest();
 
 
         if (email != null) request.setEmail(email);
-        if (roleID != null) request.setRoleID(roleID);
+        if (role != null) request.setRole(role);
 
         HttpStatus httpStatus = HttpStatus.OK;
         FormattedResponse response;

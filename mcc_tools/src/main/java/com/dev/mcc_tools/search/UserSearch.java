@@ -1,5 +1,6 @@
 package com.dev.mcc_tools.search;
 
+import com.dev.mcc_tools.domain.Role;
 import com.dev.mcc_tools.domain.User;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
@@ -26,10 +27,10 @@ public class UserSearch {
 
         Root<User> root = criteriaQuery.from(User.class);
 
-        if (request.getRoleID() != null) {
-            System.out.println(request.getRoleID());
+        if (request.getRole() != null) {
+            System.out.println(request.getRole().equals(request.getRole()));
             Predicate roleIDP = criteriaBuilder
-                    .equal(root.get("roleID"), request.getRoleID());
+                    .equal(root.get("role"), Enum.valueOf(Role.class,request.getRole()));
             predicates.add(
                     roleIDP
             );
