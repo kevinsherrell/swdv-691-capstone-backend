@@ -1,6 +1,7 @@
 package com.dev.mcc_tools.controllers;
 
 import com.dev.mcc_tools.domain.User;
+import com.dev.mcc_tools.email.EmailSenderService;
 import com.dev.mcc_tools.search.UserSearch;
 import com.dev.mcc_tools.search.UserSearchRequest;
 import com.dev.mcc_tools.services.UserService;
@@ -9,6 +10,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,16 +25,22 @@ public class UserController {
     private UserService userService;
     @Autowired
     private UserSearch userSearch;
+    @Autowired
+    private EmailSenderService senderService;
+    @Autowired
+    private PasswordEncoder encoder;
     private final UserValidator userValidator = new UserValidator();
 
-    @PostMapping("")
-    public ResponseEntity<?> createNewUser(@Valid @RequestBody User user, BindingResult result) {
-        HttpStatus httpStatus = HttpStatus.CREATED;
-
-        User created = userService.saveOrUpdateUser(user);
-        FormattedResponse response = new FormattedResponse(httpStatus.value(), true, created);
-        return new ResponseEntity<>(response, httpStatus);
-    }
+//    @PostMapping("")
+//    public ResponseEntity<?> createNewUser(@Valid @RequestBody User user, BindingResult result) {
+//        HttpStatus httpStatus = HttpStatus.CREATED;
+//
+//        String encoded = encoder.encode(user.getPassword());
+//        user.setPassword(encoded);
+//        User created = userService.saveOrUpdateUser(user);
+//        FormattedResponse response = new FormattedResponse(httpStatus.value(), true, created);
+//        return new ResponseEntity<>(response, httpStatus);
+//    }
 
     @GetMapping("")
     public ResponseEntity<?> getAllUsers() {
@@ -40,6 +48,7 @@ public class UserController {
 
         Iterable<User> found = userService.findAllUsers();
         FormattedResponse response = new FormattedResponse(httpStatus.value(), true, found);
+
         return new ResponseEntity<>(response, httpStatus);
     }
 
@@ -67,6 +76,7 @@ public class UserController {
         HttpStatus httpStatus = HttpStatus.OK;
 
         User found = userService.findUserById(userID);
+        System.out.println(found.getPassword());
         return new ResponseEntity<>(found, httpStatus);
     }
 
@@ -76,10 +86,12 @@ public class UserController {
         HttpStatus httpStatus = HttpStatus.CREATED;
         FormattedResponse response;
 
+
         // get user by id
         User user = userService.findUserById(pk);
         // get hashed user password
         String oldPassword = user.getPassword();
+
 
         // compare old password to new password
         userValidator.checkPasswordUpdate(oldPassword, updateObj);
@@ -89,8 +101,7 @@ public class UserController {
         // hash the old password
         // set the found user password to the new password
         if (errors.isEmpty()) {
-            System.out.println("No Errors");
-            user.setPassword(updateObj.get("newPassword"));
+            user.setPassword(encoder.encode(updateObj.get("newPassword")));
             // save the user
             userService.saveOrUpdateUser(user);
             // send and email to the user confirming that the password has been changed.
@@ -98,7 +109,6 @@ public class UserController {
             response = new FormattedResponse(httpStatus.value(), true, user);
         } else {
             httpStatus = HttpStatus.BAD_REQUEST;
-            System.out.println("Errors present");
             response = new ErrorResponse(httpStatus.value(), false, errors);
         }
         System.out.println(user.getPassword());

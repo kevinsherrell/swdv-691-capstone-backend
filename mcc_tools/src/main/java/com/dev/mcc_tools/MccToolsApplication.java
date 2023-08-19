@@ -14,16 +14,16 @@ import java.util.TimeZone;
 @SpringBootApplication
 public class MccToolsApplication {
 
-	@Autowired
-	private EmailSenderService senderService;
+//	@Autowired
+//	private EmailSenderService senderService;
 	public static void main(String[] args) {
 		TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
 		SpringApplication.run(MccToolsApplication.class, args
 		);
 	}
 
-	@EventListener(ApplicationReadyEvent.class)
-	public void sendMail(){
-		senderService.sendEmail(System.getenv("EMAIL_TEST_RECIPIENT"),"test email from application", "this is a test email from capstone project!");
-	}
+//	@EventListener(ApplicationReadyEvent.class)
+//	public void sendMail(){
+//		senderService.sendEmail(System.getenv("EMAIL_TEST_RECIPIENT"),"test email from application", "this is a test email from capstone project!");
+//	}
 }
