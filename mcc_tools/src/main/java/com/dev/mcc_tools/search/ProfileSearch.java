@@ -28,12 +28,15 @@ public class ProfileSearch {
         List<Predicate> predicates = new ArrayList<>();
 
         Root<Profile> root = query.from(Profile.class);
-        Join<Profile, PhoneNumber> phone = root.join("phoneNumber");
+
+        // joins below caused issue that prevented data from being retrieved properly.
+        // Explore further...
+//        Join<Profile, PhoneNumber> phone = root.join("phoneNumber");
         Join<Profile, User> user = root.join("user");
 
         if (request.getFirstName() != null) {
             Predicate fnameP = builder
-                    .like(root.get("firstName"), "%" + request.getFirstName() + "%");
+                    .like(builder.lower(root.get("firstName")), ("%" + request.getFirstName() + "%").toLowerCase());
             predicates.add(
                     fnameP
             );
@@ -45,15 +48,15 @@ public class ProfileSearch {
             predicates.add(lnameP);
         }
 
-        if (request.getPhoneNumber() != null) {
-            Predicate phoneP = builder
-                    .like(phone.get("number"), "%" + request.getPhoneNumber() + "%");
-            predicates.add(phoneP);
-        }
+//        if (request.getPhoneNumber() != null) {
+//            Predicate phoneP = builder
+//                    .like(phone.get("number"), "%" + request.getPhoneNumber() + "%");
+//            predicates.add(phoneP);
+//        }
 
         if (request.getEmail() != null) {
             Predicate emailP = builder
-                    .like(user.get("email"), "%" + request.getEmail() + "%");
+                    .like(user.get("email"), "%" + request.getEmail() +"%" );
             predicates.add(emailP);
         }
 

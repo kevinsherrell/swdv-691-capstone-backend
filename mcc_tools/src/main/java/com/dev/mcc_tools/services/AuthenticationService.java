@@ -27,7 +27,7 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
 
-    public String login(AuthRequest request) {
+    public AuthenticationResponse login(AuthRequest request) {
 
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -36,7 +36,8 @@ public class AuthenticationService {
                 )
         );
         User user = userRepository.findByEmail(request.getEmail());
-        return jwtService.generateToken(user);
+        AuthenticationResponse response = new AuthenticationResponse(user, jwtService.generateToken(user));
+        return response;
 
     }
 }

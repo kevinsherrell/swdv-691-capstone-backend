@@ -65,6 +65,7 @@ public class Appointment {
 
     @OneToMany
     @JoinColumn(name = "order_id", referencedColumnName = "order_id", insertable = false, updatable = false)
+//    @JsonIgnore
     private List<Order> orders;
 
     @ManyToOne

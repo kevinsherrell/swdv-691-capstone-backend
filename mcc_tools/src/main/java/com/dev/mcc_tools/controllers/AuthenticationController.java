@@ -11,13 +11,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
+@CrossOrigin
 public class AuthenticationController {
     @Autowired
     private UserService userService;
@@ -38,7 +36,7 @@ public class AuthenticationController {
         User created = userService.saveOrUpdateUser(user);
         FormattedResponse response = new FormattedResponse(httpStatus.value(), true, created);
 
-        senderService.sendEmail(user.getEmail(), "Account Created", "Your account has been created. " + unHashed + " is your temporary password, click this link to get started");
+//        senderService.sendEmail(user.getEmail(), "Account Created", "Your account has been created. " + unHashed + " is your temporary password, click this link to get started");
 
         return new ResponseEntity<>(response, httpStatus);
     }
@@ -46,9 +44,16 @@ public class AuthenticationController {
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestBody AuthRequest authRequest) {
         HttpStatus httpStatus = HttpStatus.OK;
-        String token = authenticationService.login(authRequest);
-        FormattedResponse response = new FormattedResponse(httpStatus.value(), true, token);
+        AuthenticationResponse authResponse = authenticationService.login(authRequest);
+        FormattedResponse response = new FormattedResponse(httpStatus.value(), true, authResponse);
 
+        return new ResponseEntity<>(response, httpStatus);
+    }
+    @GetMapping("/refresh")
+    public ResponseEntity<?> refresh(@RequestParam String email){
+        HttpStatus httpStatus = HttpStatus.OK;
+        User found = userService.findUserByEmail(email);
+        FormattedResponse response = new FormattedResponse(httpStatus.value(), true, found);
         return new ResponseEntity<>(response, httpStatus);
     }
 }

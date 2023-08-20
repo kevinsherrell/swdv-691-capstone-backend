@@ -17,6 +17,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.Format;
+import java.text.ParseException;
 import java.util.HashMap;
 
 @RestController
@@ -53,7 +54,7 @@ public class ProfileController {
             @RequestParam(required = false, name = "lastName") String lastName,
             @RequestParam(required = false, name = "phoneNumber") String phoneNumber,
             @RequestParam(required = false, name = "email") String email
-    ) {
+    ) throws ParseException {
         ProfileSearchRequest request = new ProfileSearchRequest();
 
 

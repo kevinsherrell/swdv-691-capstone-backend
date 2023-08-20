@@ -14,12 +14,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.Format;
 import java.util.HashMap;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/user")
-@CrossOrigin
+@CrossOrigin(origins = "http://localhost:3000")
 public class UserController {
     @Autowired
     private UserService userService;
@@ -52,6 +53,13 @@ public class UserController {
         return new ResponseEntity<>(response, httpStatus);
     }
 
+    @GetMapping("/email/{email}")
+    public ResponseEntity<?> getByEmail(@PathVariable String email) {
+        HttpStatus httpStatus = HttpStatus.OK;
+        User found = userService.findUserByEmail(email);
+        FormattedResponse response = new FormattedResponse(httpStatus.value(), true, found);
+        return new ResponseEntity<>(response, httpStatus);
+    }
     @GetMapping("/search")
     public ResponseEntity<?> userSearch(
             @RequestParam(required = false, name = "role") String role,
@@ -71,7 +79,7 @@ public class UserController {
         return new ResponseEntity<>(response, httpStatus);
     }
 
-    @GetMapping("/{userID}")
+    @GetMapping("/userid/{userID}")
     public ResponseEntity<?> getUserById(@PathVariable int userID) {
         HttpStatus httpStatus = HttpStatus.OK;
 

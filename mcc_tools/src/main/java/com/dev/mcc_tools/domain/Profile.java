@@ -54,14 +54,17 @@ public class Profile {
     @JoinColumn(name = "user_id", referencedColumnName = "user_id", insertable = false, updatable = false)
     private User user;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "profile_id", referencedColumnName = "profile_id", insertable = false, updatable = false)
+//    @JsonIgnore
     private PhoneNumber phoneNumber;
     @OneToMany
     @JoinColumn(name = "profile_id", referencedColumnName = "profile_id", insertable = false, updatable = false)
+//    @JsonIgnore
     private List<Order> orders;
     @OneToMany
     @JoinColumn(name = "profile_id", referencedColumnName = "profile_id", insertable = false, updatable = false)
+//    @JsonIgnore
     private List<Appointment> appointments;
 
     @OneToOne
@@ -70,7 +73,6 @@ public class Profile {
     @OneToMany
     @JoinColumn(name = "profile_id", referencedColumnName = "profile_id", insertable = false, updatable = false)
     private List<Notification> notifications;
-
 
 
 }
