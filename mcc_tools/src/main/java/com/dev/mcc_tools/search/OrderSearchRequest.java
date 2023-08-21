@@ -14,9 +14,9 @@ import java.time.format.DateTimeFormatter;
 public class OrderSearchRequest {
     private String invoiceNumber;
     private String status;
-    private String firstName;
-    private String lastName;
-    private String email;
+//    private String firstName;
+//    private String lastName;
+//    private String email;
     private String minDate;
     private String maxDate;
 

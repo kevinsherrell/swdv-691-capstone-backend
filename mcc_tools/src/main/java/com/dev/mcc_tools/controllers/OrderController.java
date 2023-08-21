@@ -62,9 +62,9 @@ public class OrderController {
     public ResponseEntity<?> OrderSearch(
             @RequestParam(required = false, name = "invoiceNumber") String invoiceNumber,
             @RequestParam(required = false, name = "status") String status,
-            @RequestParam(required = false, name = "firstName") String firstName,
-            @RequestParam(required = false, name = "lastName") String lastName,
-            @RequestParam(required = false, name = "email") String email,
+//            @RequestParam(required = false, name = "firstName") String firstName,
+//            @RequestParam(required = false, name = "lastName") String lastName,
+//            @RequestParam(required = false, name = "email") String email,
             @RequestParam(required = false, name = "minDate") String minDate,
             @RequestParam(required = false, name = "maxDate") String maxDate
     ) throws ParseException {
@@ -76,9 +76,9 @@ public class OrderController {
 
         if (invoiceNumber != null) request.setInvoiceNumber(invoiceNumber);
         if (status != null) request.setStatus(status);
-        if (firstName != null) request.setFirstName(firstName);
-        if (lastName != null) request.setLastName(lastName);
-        if (email != null) request.setEmail(email);
+//        if (firstName != null) request.setFirstName(firstName);
+//        if (lastName != null) request.setLastName(lastName);
+//        if (email != null) request.setEmail(email);
         if (minDate != null) request.setMinDate(minDate);
         if (maxDate != null) request.setMaxDate(maxDate);
 

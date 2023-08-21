@@ -31,41 +31,55 @@ public class AppointmentSearch {
         Join<Appointment, Profile> profile = root.join("profile");
         Join<Appointment, Order> order = profile.join("orders");
 
-        if (request.getFirstName() != null) {
-            Predicate fnameP = builder
-                    .like(builder.lower(profile.get("firstName")), ("%" + request.getFirstName() + "%").toLowerCase());
-            predicates.add(
-                    fnameP
-            );
-        }
-        if (request.getLastName() != null) {
-            Predicate lnameP = builder
-                    .like(builder.lower(profile.get("lastName")), ("%" + request.getLastName() + "%").toLowerCase());
-            predicates.add(
-                    lnameP
-            );
-        }
+//        if (request.getFirstName() != null) {
+//            Predicate fnameP = builder
+//                    .like(builder.lower(profile.get("firstName")), ("%" + request.getFirstName() + "%").toLowerCase());
+//            predicates.add(
+//                    fnameP
+//            );
+//        }
+
+//        if (request.getLastName() != null) {
+//            Predicate lnameP = builder
+//                    .like(builder.lower(profile.get("lastName")), ("%" + request.getLastName() + "%").toLowerCase());
+//            predicates.add(
+//                    lnameP
+//            );
+//        }
+
         if ((request.getStatus()) != null) {
             Predicate statusP = builder
                     .equal(root.get("status"), request.getStatus());
             predicates.add(statusP);
         }
 //
-        if (request.getInvoiceNumber() != null) {
-            Predicate invoiceP = builder
-                    .like(order.get("invoiceNumber"), "%" + request.getInvoiceNumber() + "%");
-            predicates.add(invoiceP);
+//        if (request.getInvoiceNumber() != null) {
+//            Predicate invoiceP = builder
+//                    .like(order.get("invoiceNumber"), "%" + request.getInvoiceNumber() + "%");
+//            predicates.add(invoiceP);
+//        }
+
+        if(request.getMinCreationDate() != null){
+            Predicate minCreateP = builder
+                    .greaterThanOrEqualTo(root.get("date_created"), request.getMinCreationDate());
+            datePredicates.add(minCreateP);
+        }
+
+        if(request.getMaxCreationDate() != null){
+            Predicate maxCreateP = builder
+                    .lessThanOrEqualTo(root.get("date_created"), request.getMaxCreationDate());
+            datePredicates.add(maxCreateP);
         }
 
         if (request.getMinDate() != null) {
             Predicate mDateP = builder
-                    .greaterThanOrEqualTo(root.get("date_created"), request.parseDateString(request.getMinDate()));
+                    .greaterThanOrEqualTo(root.get("date"), request.parseDateString(request.getMinDate()));
             datePredicates.add(mDateP);
         }
         if (request.getMaxDate() != null) {
 
             Predicate maxDateP = builder
-                    .lessThanOrEqualTo(root.get("date_created"), request.parseDateString(request.getMaxDate()));
+                    .lessThanOrEqualTo(root.get("date"), request.parseDateString(request.getMaxDate()));
             datePredicates.add(maxDateP);
         }
         // final query

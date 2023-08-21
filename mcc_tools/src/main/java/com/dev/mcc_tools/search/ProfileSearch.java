@@ -29,7 +29,7 @@ public class ProfileSearch {
 
         Root<Profile> root = query.from(Profile.class);
 
-        // joins below caused issue that prevented data from being retrieved properly.
+        // phone number join ... and possibly the user join,  below caused issue that prevented data from being retrieved properly.
         // Explore further...
 //        Join<Profile, PhoneNumber> phone = root.join("phoneNumber");
         Join<Profile, User> user = root.join("user");

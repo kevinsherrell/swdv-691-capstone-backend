@@ -16,13 +16,15 @@ import java.time.format.DateTimeFormatter;
 @RequiredArgsConstructor
 @ToString
 public class AppointmentSearchRequest {
-    private String firstName;
-    private String lastName;
+//    private String firstName;
+//    private String lastName;
     private String status;
     private String minDate;
     private String maxDate;
+    private String minCreationDate;
+    private String maxCreationDate;
     private String location;
-    private String invoiceNumber;
+//    private String invoiceNumber;
 
     public Timestamp parseDateString(String dateString) throws ParseException {
         DateTimeFormatter dt = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");

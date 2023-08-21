@@ -30,20 +30,20 @@ public class OrderSearch {
         Join<Order, Profile> profile = root.join("profile");
         Join<Profile, User> user = profile.join("user");
 
-        if (request.getFirstName() != null) {
-            Predicate fnameP = builder
-                    .like(builder.lower(profile.get("firstName")), ("%" + request.getFirstName() + "%").toLowerCase());
-            predicates.add(
-                    fnameP
-            );
-        }
-        if (request.getLastName() != null) {
-            Predicate lnameP = builder
-                    .like(builder.lower(profile.get("lastName")), ("%" + request.getLastName() + "%").toLowerCase());
-            predicates.add(
-                    lnameP
-            );
-        }
+//        if (request.getFirstName() != null) {
+//            Predicate fnameP = builder
+//                    .like(builder.lower(profile.get("firstName")), ("%" + request.getFirstName() + "%").toLowerCase());
+//            predicates.add(
+//                    fnameP
+//            );
+//        }
+//        if (request.getLastName() != null) {
+//            Predicate lnameP = builder
+//                    .like(builder.lower(profile.get("lastName")), ("%" + request.getLastName() + "%").toLowerCase());
+//            predicates.add(
+//                    lnameP
+//            );
+//        }
         if ((request.getStatus()) != null) {
             Predicate statusP = builder
                     .equal(root.get("status"), request.getStatus());
@@ -56,11 +56,11 @@ public class OrderSearch {
             predicates.add(invoiceP);
         }
 //
-        if (request.getEmail() != null) {
-            Predicate emailP = builder
-                    .like(builder.lower(user.get("email")), ("%" + request.getEmail() + "%").toLowerCase());
-            predicates.add(emailP);
-        }
+//        if (request.getEmail() != null) {
+//            Predicate emailP = builder
+//                    .like(builder.lower(user.get("email")), ("%" + request.getEmail() + "%").toLowerCase());
+//            predicates.add(emailP);
+//        }
 
         if (request.getMinDate() != null) {
             Predicate mDateP = builder

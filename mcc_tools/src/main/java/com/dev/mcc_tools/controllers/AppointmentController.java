@@ -31,13 +31,15 @@ public class AppointmentController {
 
     @GetMapping("/search")
     public ResponseEntity<?> AppointmentSearch(
-            @RequestParam(required = false, name = "firstName") String firstName,
-            @RequestParam(required = false, name = "lastName") String lastName,
+//            @RequestParam(required = false, name = "firstName") String firstName,
+//            @RequestParam(required = false, name = "lastName") String lastName,
             @RequestParam(required = false, name = "status") String status,
             @RequestParam(required = false, name = "minDate") String minDate,
             @RequestParam(required = false, name = "maxDate") String maxDate,
-            @RequestParam(required = false, name = "invoiceNumber") String invoiceNumber,
-            @RequestParam(required = false, name = "location") String location
+//            @RequestParam(required = false, name = "invoiceNumber") String invoiceNumber,
+            @RequestParam(required = false, name = "location") String location,
+            @RequestParam(required = false, name = "minCreationDate") String minCreationDate,
+            @RequestParam(required = false, name = "maxCreationDate") String maxCreationDate
     ) throws ParseException {
         HttpStatus httpStatus = HttpStatus.OK;
         FormattedResponse response;
@@ -45,12 +47,14 @@ public class AppointmentController {
         AppointmentSearchRequest request = new AppointmentSearchRequest();
 
         if (location != null) request.setLocation(location);
-        if (firstName != null) request.setFirstName(firstName);
-        if (lastName != null) request.setLastName(lastName);
+//        if (firstName != null) request.setFirstName(firstName);
+//        if (lastName != null) request.setLastName(lastName);
         if (status != null) request.setStatus(status);
         if (minDate != null) request.setMinDate(minDate);
         if (maxDate != null) request.setMaxDate(maxDate);
-        if (invoiceNumber != null) request.setInvoiceNumber(invoiceNumber);
+        if (minCreationDate != null) request.setMinCreationDate(minCreationDate);
+        if (maxCreationDate != null) request.setMaxCreationDate(maxCreationDate);
+//        if (invoiceNumber != null) request.setInvoiceNumber(invoiceNumber);
 
 
         Iterable<Appointment> found = appointmentSearch.findAllByCriteria(request);
