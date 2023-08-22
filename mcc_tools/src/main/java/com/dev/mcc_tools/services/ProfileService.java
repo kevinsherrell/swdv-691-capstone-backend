@@ -68,15 +68,36 @@ public class ProfileService {
         return profileRepository.findAll();
     }
 
-    public Profile findProfileById(int id) {
+    public FormattedResponse findProfileById(int id) {
+        profileValidator.initializeErrors();
 
-        Profile found = profileRepository.findById(id);
-        return found;
+        HttpStatus httpStatus = HttpStatus.OK;
+        HashMap<String, ArrayList<String>> errors = profileValidator.getErrors();
+
+        try {
+            Profile found = profileRepository.findById(id);
+            profileValidator.checkForProfile(found);
+            return new FormattedResponse(httpStatus.value(), true, found);
+        } catch (Exception e) {
+            httpStatus = HttpStatus.BAD_REQUEST;
+            return new ErrorResponse(httpStatus.value(), false, errors);
+        }
 
     }
 
-    public Profile findProfileByUserID(int userID) {
-        Profile found = profileRepository.findByUserID(userID);
-        return found;
+    public FormattedResponse findProfileByUserID(int userID) {
+        profileValidator.initializeErrors();
+
+        HttpStatus httpStatus = HttpStatus.OK;
+        HashMap<String, ArrayList<String>> errors = profileValidator.getErrors();
+
+        try {
+            Profile found = profileRepository.findByUserID(userID);
+            profileValidator.checkForProfile(found);
+            return new FormattedResponse(httpStatus.value(), true, found);
+        } catch (Exception e) {
+            httpStatus = HttpStatus.BAD_REQUEST;
+            return new ErrorResponse(httpStatus.value(), false, errors);
+        }
     }
 }

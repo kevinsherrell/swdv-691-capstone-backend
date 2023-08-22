@@ -6,9 +6,10 @@ import java.util.regex.Pattern;
 
 public class ProfileValidator extends MccValidator {
 
-    public void checkForProfile(Profile profile) {
+    public void checkForProfile(Profile profile) throws Exception {
         if (profile == null) {
             setErrors("profile", "profile not found");
+            throw new Exception();
         }
     }
 
@@ -58,7 +59,7 @@ public class ProfileValidator extends MccValidator {
         if (phoneType == null || phoneType.isEmpty()) {
             setErrors("phoneType", "phone type must not be empty");
         }
-        if(!errors.isEmpty()){
+        if (!errors.isEmpty()) {
             throw new Exception();
         }
     }
@@ -79,7 +80,7 @@ public class ProfileValidator extends MccValidator {
             setErrors("phoneNumber", "phone type must be either MOBILE or LANDLINE");
         }
 
-        if(!errors.isEmpty()){
+        if (!errors.isEmpty()) {
             throw new Exception();
         }
     }

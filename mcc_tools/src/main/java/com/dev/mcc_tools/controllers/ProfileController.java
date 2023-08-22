@@ -9,6 +9,7 @@ import com.dev.mcc_tools.services.ProfileService;
 import com.dev.mcc_tools.validation.MccValidator;
 import com.dev.mcc_tools.validation.ProfileValidator;
 import jakarta.validation.Valid;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
@@ -85,34 +86,18 @@ public class ProfileController {
 
     @GetMapping("/{pk}")
     public ResponseEntity<?> getProfileByID(@PathVariable int pk) {
-        HttpStatus httpStatus = HttpStatus.OK;
 
-        Profile found = profileService.findProfileById(pk);
-        FormattedResponse response = new FormattedResponse(httpStatus.value(), true, found);
-        return new ResponseEntity<>(response, httpStatus);
+
+        FormattedResponse response = profileService.findProfileById(pk);
+
+        return new ResponseEntity<>(response, HttpStatusCode.valueOf(response.getStatusCode()));
     }
 
-//    @GetMapping("/user/{userID}")
-//    public ResponseEntity<?> getProfileByUserID(@PathVariable int userID) {
-//        HttpStatus httpStatus = HttpStatus.OK;
-//        FormattedResponse response;
-//        HashMap<String, ArrayList<String>> errors = profileValidator.getErrors();
-////        HashMap<String, String> errors = profileValidator.getErrors();
-//
-//        Profile found = profileService.findProfileByUserID(userID);
-//
-//        profileValidator.checkProfile(found);
-//
-//        if (errors.isEmpty()) {
-//
-//            response = new FormattedResponse(httpStatus.value(), true, found);
-//        } else {
-//            httpStatus = HttpStatus.BAD_REQUEST;
-//            response = new ErrorResponse(httpStatus.value(), false, errors);
-//
-//        }
-//        return new ResponseEntity<>(response, httpStatus);
-//    }
+    @GetMapping("/user/{userID}")
+    public ResponseEntity<?> getProfileByUserID(@PathVariable int userID) {
+      FormattedResponse response = profileService.findProfileByUserID(userID);
+      return new ResponseEntity<>(response, HttpStatusCode.valueOf(response.getStatusCode()));
+    }
 
 
 //    @PutMapping("/update/{pk}")
