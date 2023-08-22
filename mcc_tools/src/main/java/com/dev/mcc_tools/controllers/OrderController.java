@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.text.Format;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 @RestController
@@ -28,26 +29,26 @@ public class OrderController {
 
     private final OrderValidator orderValidator = new OrderValidator();
 
-    @PostMapping("")
-    public ResponseEntity<?> createNewOrder(@Valid @RequestBody Order order, BindingResult result) {
-        orderValidator.initializeErrors();
-
-
-        HttpStatus httpStatus = HttpStatus.CREATED;
-        FormattedResponse response;
-        HashMap<String, String> errors = orderValidator.getErrors();
-
-        orderValidator.checkOrderFormat(order);
-
-        if (errors.isEmpty()) {
-            Order created = orderService.saveOrUpdateOrder(order);
-            response = new FormattedResponse(httpStatus.value(), true, created);
-        } else {
-            httpStatus = HttpStatus.BAD_REQUEST;
-            response = new ErrorResponse(httpStatus.value(), false, errors);
-        }
-        return new ResponseEntity<>(response, httpStatus);
-    }
+//    @PostMapping("")
+//    public ResponseEntity<?> createNewOrder(@Valid @RequestBody Order order, BindingResult result) {
+//        orderValidator.initializeErrors();
+//
+//
+//        HttpStatus httpStatus = HttpStatus.CREATED;
+//        FormattedResponse response;
+//        HashMap<String, String> errors = orderValidator.getErrors();
+//
+//        orderValidator.checkOrderFormat(order);
+//
+//        if (errors.isEmpty()) {
+//            Order created = orderService.saveOrUpdateOrder(order);
+//            response = new FormattedResponse(httpStatus.value(), true, created);
+//        } else {
+//            httpStatus = HttpStatus.BAD_REQUEST;
+//            response = new ErrorResponse(httpStatus.value(), false, errors);
+//        }
+//        return new ResponseEntity<>(response, httpStatus);
+//    }
 
     @GetMapping("")
     public ResponseEntity<?> getAllOrders() {
@@ -115,7 +116,8 @@ public class OrderController {
 
         HttpStatus httpStatus = HttpStatus.CREATED;
         FormattedResponse response;
-        HashMap<String, String> errors = orderValidator.getErrors();
+//        HashMap<String, String> errors = orderValidator.getErrors();
+        HashMap<String, ArrayList<String>> errors = orderValidator.getErrors();
 
         Order found = orderService.findOrderById(pk);
         System.out.println(found.getOrderID());
@@ -156,7 +158,8 @@ public class OrderController {
         HttpStatus httpStatus = HttpStatus.CREATED;
         FormattedResponse response;
 
-        HashMap<String, String> errors = orderValidator.getErrors();
+        HashMap<String, ArrayList<String>> errors = orderValidator.getErrors();
+//        HashMap<String, String> errors = orderValidator.getErrors();
 
         Order found = orderService.findOrderById(pk);
 

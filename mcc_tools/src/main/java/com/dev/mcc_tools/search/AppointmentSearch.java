@@ -24,8 +24,8 @@ public class AppointmentSearch {
     ) throws ParseException {
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Appointment> query = builder.createQuery(Appointment.class);
-        List<Predicate> predicates = new ArrayList<>();
-        List<Predicate> datePredicates = new ArrayList<>();
+        List<Predicate> orPredicates = new ArrayList<>();
+        List<Predicate> andPredicates = new ArrayList<>();
 
         Root<Appointment> root = query.from(Appointment.class);
         Join<Appointment, Profile> profile = root.join("profile");
@@ -49,43 +49,43 @@ public class AppointmentSearch {
 
         if ((request.getStatus()) != null) {
             Predicate statusP = builder
-                    .equal(root.get("status"), request.getStatus());
-            predicates.add(statusP);
+                    .like(root.get("status"), request.getStatus());
+            orPredicates.add(statusP);
         }
 //
-//        if (request.getInvoiceNumber() != null) {
-//            Predicate invoiceP = builder
-//                    .like(order.get("invoiceNumber"), "%" + request.getInvoiceNumber() + "%");
-//            predicates.add(invoiceP);
-//        }
+        if (request.getLocation() != null) {
+            Predicate locationP = builder
+                    .equal(order.get("location"), request.getLocation());
+            orPredicates.add(locationP);
+        }
 
         if(request.getMinCreationDate() != null){
             Predicate minCreateP = builder
-                    .greaterThanOrEqualTo(root.get("date_created"), request.getMinCreationDate());
-            datePredicates.add(minCreateP);
+                    .greaterThanOrEqualTo(root.get("date_created"), request.parseDateString(request.getMinCreationDate()));
+            orPredicates.add(minCreateP);
         }
 
         if(request.getMaxCreationDate() != null){
             Predicate maxCreateP = builder
-                    .lessThanOrEqualTo(root.get("date_created"), request.getMaxCreationDate());
-            datePredicates.add(maxCreateP);
+                    .lessThanOrEqualTo(root.get("date_created"), request.parseDateString(request.getMaxCreationDate()));
+            orPredicates.add(maxCreateP);
         }
 
         if (request.getMinDate() != null) {
             Predicate mDateP = builder
                     .greaterThanOrEqualTo(root.get("date"), request.parseDateString(request.getMinDate()));
-            datePredicates.add(mDateP);
+            orPredicates.add(mDateP);
         }
         if (request.getMaxDate() != null) {
 
             Predicate maxDateP = builder
                     .lessThanOrEqualTo(root.get("date"), request.parseDateString(request.getMaxDate()));
-            datePredicates.add(maxDateP);
+            orPredicates.add(maxDateP);
         }
         // final query
         query.where(
-                builder.or(predicates.toArray(new Predicate[0])),
-                builder.and(datePredicates.toArray(new Predicate[0]))
+                builder.or(orPredicates.toArray(new Predicate[0])),
+                builder.and(andPredicates.toArray(new Predicate[0]))
         );
 
         TypedQuery<Appointment> typedQuery = entityManager.createQuery(query);

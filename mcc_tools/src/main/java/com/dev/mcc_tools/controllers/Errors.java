@@ -1,9 +1,16 @@
 package com.dev.mcc_tools.controllers;
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import org.springframework.http.HttpStatus;
+
 import java.util.HashMap;
 
+@AllArgsConstructor
+@NoArgsConstructor
 public class Errors {
-    private HashMap<String, String> errors;
+
+    private HashMap<String, String> errors = new HashMap<>();
     private String field;
     private String message;
     public Errors(String field, String message){

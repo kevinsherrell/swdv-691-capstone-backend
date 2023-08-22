@@ -3,10 +3,8 @@ package com.dev.mcc_tools.domain;
 import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.SourceType;
@@ -24,7 +22,10 @@ import java.util.List;
 @Table(name = "users")
 @ToString
 @Getter
+@Setter
 @RequiredArgsConstructor
+@AllArgsConstructor
+//@NoArgsConstructor
 public class User implements UserDetails {
 
     @Id
@@ -36,6 +37,7 @@ public class User implements UserDetails {
     @Column(unique = true)
     private String email;
 
+    @NotBlank
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
@@ -56,6 +58,7 @@ public class User implements UserDetails {
     @JoinColumn(name = "user_id", referencedColumnName = "user_id", insertable = false, updatable = false)
     @JsonIgnore
     private Profile profile;
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -91,34 +94,5 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
-
-    public void setUserID(int userID) {
-        this.userID = userID;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
-
-    public void setDate_created(Date date_created) {
-        this.date_created = date_created;
-    }
-
-    public void setDate_updated(Date date_updated) {
-        this.date_updated = date_updated;
-    }
-
-    public void setProfile(Profile profile) {
-        this.profile = profile;
-    }
-
 
 }

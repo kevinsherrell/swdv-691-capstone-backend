@@ -12,12 +12,15 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.reflect.Array;
 import java.text.Format;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 @RestController
@@ -32,12 +35,19 @@ public class ProfileController {
 
     @PostMapping("")
     public ResponseEntity<?> createNewProfile(@Valid @RequestBody Profile profile, BindingResult result) {
-        HttpStatus httpStatus = HttpStatus.CREATED;
 
-        Profile created = profileService.saveOrUpdateProfile(profile);
-        FormattedResponse response = new FormattedResponse(httpStatus.value(), true, created);
-        return new ResponseEntity<>(response, httpStatus);
+        FormattedResponse response = profileService.saveProfile(profile);
+
+        return new ResponseEntity<>(response, HttpStatusCode.valueOf(response.getStatusCode()));
     }
+///    @PostMapping("")
+//    public ResponseEntity<?> createNewProfile(@Valid @RequestBody Profile profile, BindingResult result) {
+//        HttpStatus httpStatus = HttpStatus.CREATED;
+//
+//        Profile created = profileService.saveOrUpdateProfile(profile);
+//        FormattedResponse response = new FormattedResponse(httpStatus.value(), true, created);
+//        return new ResponseEntity<>(response, httpStatus);
+//    }
 
     @GetMapping("")
     public ResponseEntity<?> getAllProfiles() {
@@ -82,46 +92,48 @@ public class ProfileController {
         return new ResponseEntity<>(response, httpStatus);
     }
 
-    @GetMapping("/user/{userID}")
-    public ResponseEntity<?> getProfileByUserID(@PathVariable int userID) {
-        HttpStatus httpStatus = HttpStatus.OK;
-        FormattedResponse response;
-        HashMap<String, String> errors = profileValidator.getErrors();
+//    @GetMapping("/user/{userID}")
+//    public ResponseEntity<?> getProfileByUserID(@PathVariable int userID) {
+//        HttpStatus httpStatus = HttpStatus.OK;
+//        FormattedResponse response;
+//        HashMap<String, ArrayList<String>> errors = profileValidator.getErrors();
+////        HashMap<String, String> errors = profileValidator.getErrors();
+//
+//        Profile found = profileService.findProfileByUserID(userID);
+//
+//        profileValidator.checkProfile(found);
+//
+//        if (errors.isEmpty()) {
+//
+//            response = new FormattedResponse(httpStatus.value(), true, found);
+//        } else {
+//            httpStatus = HttpStatus.BAD_REQUEST;
+//            response = new ErrorResponse(httpStatus.value(), false, errors);
+//
+//        }
+//        return new ResponseEntity<>(response, httpStatus);
+//    }
 
-        Profile found = profileService.findProfileByUserID(userID);
 
-        profileValidator.checkProfile(found);
-
-        if (errors.isEmpty()) {
-
-            response = new FormattedResponse(httpStatus.value(), true, found);
-        } else {
-            httpStatus = HttpStatus.BAD_REQUEST;
-            response = new ErrorResponse(httpStatus.value(), false, errors);
-
-        }
-        return new ResponseEntity<>(response, httpStatus);
-    }
-
-
-    @PutMapping("/update/{pk}")
-    public ResponseEntity<?> updateProfile(@PathVariable int pk, @RequestBody Profile profile) {
-        HttpStatus httpStatus = HttpStatus.CREATED;
-        FormattedResponse response;
-        HashMap<String, String> errors = profileValidator.getErrors();
-
-        Profile found = profileService.findProfileById(pk);
-
-        profileValidator.checkProfile(found);
-
-        if (errors.isEmpty()) {
-            Profile updated = profileService.saveOrUpdateProfile(profile);
-            response = new FormattedResponse(httpStatus.value(), true, updated);
-        } else {
-            httpStatus = HttpStatus.BAD_REQUEST;
-            response = new ErrorResponse(httpStatus.value(), false, errors);
-        }
-
-        return new ResponseEntity<>(response, httpStatus);
-    }
+//    @PutMapping("/update/{pk}")
+//    public ResponseEntity<?> updateProfile(@PathVariable int pk, @RequestBody Profile profile) {
+//        HttpStatus httpStatus = HttpStatus.CREATED;
+//        FormattedResponse response;
+//        HashMap<String, ArrayList<String>> errors = profileValidator.getErrors();
+////        HashMap<String, String> errors = profileValidator.getErrors();
+//
+//        Profile found = profileService.findProfileById(pk);
+//
+//        profileValidator.checkProfile(found);
+//
+//        if (errors.isEmpty()) {
+//            Profile updated = profileService.saveOrUpdateProfile(profile);
+//            response = new FormattedResponse(httpStatus.value(), true, updated);
+//        } else {
+//            httpStatus = HttpStatus.BAD_REQUEST;
+//            response = new ErrorResponse(httpStatus.value(), false, errors);
+//        }
+//
+//        return new ResponseEntity<>(response, httpStatus);
+//    }
 }

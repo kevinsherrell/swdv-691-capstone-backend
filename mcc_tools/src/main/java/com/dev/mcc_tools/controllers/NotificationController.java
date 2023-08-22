@@ -14,6 +14,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 @RestController
@@ -89,7 +90,10 @@ public class NotificationController {
 
         Notification found = notificationService.findNotificationByID(pk);
 
-        HashMap<String, String> errors = notificationValidator.checkNotification(found);
+        HashMap<String, ArrayList<String>> errors = notificationValidator.getErrors();
+
+        notificationValidator.checkNotification(found);
+//        HashMap<String, String> errors = notificationValidator.checkNotification(found);
 
         if (errors.isEmpty()) {
             Notification updated = notificationService.saveOrUpdateNotification(profile);

@@ -42,6 +42,25 @@ public class Profile {
     @Column(name = "user_id", unique = true)
     private int userID;
 
+    @Column(name = "address_1")
+    private String address1;
+
+    @Column(name = "address_2")
+    private String address2;
+
+    private String city;
+
+    private String state;
+
+    @Column(name = "zip_code")
+    private String zipCode;
+
+    @Column(name = "phone_number")
+    private String phoneNumber;
+
+    @Column(name = "phone_type")
+    private String phoneType;
+
     @CreationTimestamp(source = SourceType.DB)
     @JsonFormat(pattern = "yyyy-mm-dd HH:mm")
     private Date date_created;
@@ -54,10 +73,6 @@ public class Profile {
     @JoinColumn(name = "user_id", referencedColumnName = "user_id", insertable = false, updatable = false)
     private User user;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "profile_id", referencedColumnName = "profile_id", insertable = false, updatable = false)
-//    @JsonIgnore
-    private PhoneNumber phoneNumber;
     @OneToMany
     @JoinColumn(name = "profile_id", referencedColumnName = "profile_id", insertable = false, updatable = false)
 //    @JsonIgnore
@@ -67,12 +82,8 @@ public class Profile {
 //    @JsonIgnore
     private List<Appointment> appointments;
 
-    @OneToOne
-    @JoinColumn(name = "profile_id", referencedColumnName = "profile_id", insertable = false, updatable = false)
-    private Address address;
     @OneToMany
     @JoinColumn(name = "profile_id", referencedColumnName = "profile_id", insertable = false, updatable = false)
     private List<Notification> notifications;
-
 
 }

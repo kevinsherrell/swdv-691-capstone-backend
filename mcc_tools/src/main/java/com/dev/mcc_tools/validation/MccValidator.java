@@ -1,29 +1,37 @@
 package com.dev.mcc_tools.validation;
 
 import com.dev.mcc_tools.domain.Notification;
-import com.dev.mcc_tools.domain.PhoneNumber;
+//import com.dev.mcc_tools.domain.PhoneNumber;
 import com.dev.mcc_tools.domain.Profile;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-
+import java.util.*;
 
 
 public class MccValidator {
 
-    protected HashMap<String, String> errors = new HashMap<>();
+//    protected HashMap<String, String> errors = new HashMap<>();
+
+    protected HashMap<String, ArrayList<String>> errors = new HashMap<>();
 
 
     public void setErrors(String field, String message) {
-        this.errors.put(field, message);
+        if(errors.containsKey(field)){
+            errors.get(field).add(message);
+        }else{
+            errors.put(field, new ArrayList<>(Arrays.asList(message)));
+        }
     }
+//    public void setErrors(String field, String message) {
+//        this.errors.put(field, message);
+//    }
     public void initializeErrors(){
         this.errors = new HashMap<>();
     }
 
-    public HashMap<String, String> getErrors() {
+//    public HashMap<String, String> getErrors() {
+//        return errors;
+//    }
+    public HashMap<String, ArrayList<String>> getErrors() {
         return errors;
     }
 
@@ -38,8 +46,10 @@ public class MccValidator {
         }
     }
     public void checkIDMatch(int pk, int requestObjID){
+        System.out.println("checking if IDs match");
         if(pk != requestObjID){
             setErrors("id mismatch", "Id in path and request body do not match. Change the id in the url path");
+            throw new InputMismatchException();
         }
     }
 }

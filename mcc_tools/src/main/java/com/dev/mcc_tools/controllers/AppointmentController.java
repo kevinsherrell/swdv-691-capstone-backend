@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 @RestController
@@ -68,7 +69,8 @@ public class AppointmentController {
 
         HttpStatus httpStatus = HttpStatus.CREATED;
         FormattedResponse response;
-        HashMap<String, String> errors = appointmentValidator.getErrors();
+//        HashMap<String, String> errors = appointmentValidator.getErrors();
+        HashMap<String, ArrayList<String>> errors = appointmentValidator.getErrors();
 
         // perform check here
         appointmentValidator.checkStatus(appointment.getStatus());
@@ -101,7 +103,8 @@ public class AppointmentController {
         HttpStatus httpStatus = HttpStatus.OK;
         FormattedResponse response;
 
-        HashMap<String, String> errors = appointmentValidator.getErrors();
+        HashMap<String, ArrayList<String>> errors = appointmentValidator.getErrors();
+//        HashMap<String, String> errors = appointmentValidator.getErrors();
 
         Appointment found = appointmentService.findByAppointmentID(pk);
         // check for null
@@ -144,7 +147,8 @@ public class AppointmentController {
 
         HttpStatus httpStatus = HttpStatus.CREATED;
         FormattedResponse response;
-        HashMap<String, String> errors = appointmentValidator.getErrors();
+//        HashMap<String, String> errors = appointmentValidator.getErrors();
+        HashMap<String, ArrayList<String>> errors = appointmentValidator.getErrors();
 
         Appointment found = appointmentService.findByAppointmentID(pk);
 
@@ -185,7 +189,8 @@ public class AppointmentController {
         HttpStatus httpStatus = HttpStatus.CREATED;
         FormattedResponse response;
 
-        HashMap<String, String> errors = appointmentValidator.getErrors();
+        HashMap<String, ArrayList<String>> errors = appointmentValidator.getErrors();
+//        HashMap<String, String> errors = appointmentValidator.getErrors();
 
         Appointment found = appointmentService.findByAppointmentID(pk);
 
