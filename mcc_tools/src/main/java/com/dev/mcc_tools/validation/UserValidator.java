@@ -12,6 +12,7 @@ import javax.naming.AuthenticationException;
 import java.util.HashMap;
 import java.util.InputMismatchException;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 
 public class UserValidator extends MccValidator {
@@ -27,11 +28,19 @@ public class UserValidator extends MccValidator {
         }
     }
 
-    public void checkPassword(String password) {
-        System.out.println("checking password");
+    public void checkPasswordFormat(String password) throws Exception {
+        String passwordRegexPattern = ".{9,}";
+        System.out.println("checking password format");
         if (password.isEmpty()) {
             setErrors("password", "password must not be empty");
-            throw new IllegalArgumentException();
+        }
+        if (!Pattern.matches(passwordRegexPattern, password)) {
+            setErrors("password", "password must contain at least 9 characters");
+        }
+
+        if (!errors.isEmpty()) {
+
+            throw new Exception();
         }
     }
 
@@ -47,7 +56,14 @@ public class UserValidator extends MccValidator {
             setErrors("password", "new password and verification must match");
             throw new Exception();
         }
+    }
 
+    public void checkPasswordRegistration(String password, String verifyPassword) throws Exception {
+        System.out.println("checking if password and verification match");
+        if (!password.equals(verifyPassword)) {
+            setErrors("password", "password and verification must match.");
+            throw new Exception();
+        }
     }
 
     public void checkUserForUpdate(User foundUser) {
@@ -57,6 +73,13 @@ public class UserValidator extends MccValidator {
             setErrors("user", "this user does not exist");
             throw new NotFoundException("user not found or does not exist");
         }
+    }
 
+    public void checkExistsForCreation(User user) throws Exception {
+        System.out.println("checking if user exists");
+        if (user != null) {
+            setErrors("user", "user with this email already exists");
+            throw new Exception();
+        }
     }
 }

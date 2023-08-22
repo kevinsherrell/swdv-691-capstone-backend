@@ -1,8 +1,12 @@
 package com.dev.mcc_tools.services;
 
 import com.dev.mcc_tools.controllers.*;
+import com.dev.mcc_tools.domain.Profile;
+import com.dev.mcc_tools.domain.Role;
 import com.dev.mcc_tools.domain.User;
+import com.dev.mcc_tools.respositories.ProfileRepository;
 import com.dev.mcc_tools.respositories.UserRepository;
+import com.dev.mcc_tools.validation.ProfileValidator;
 import com.dev.mcc_tools.validation.UserValidator;
 import org.hibernate.JDBCException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +17,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -31,44 +36,110 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
     @Autowired
+    private ProfileRepository profileRepository;
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     //    private final PasswordEncoder encoder = new BCryptPasswordEncoder();
     private final UserValidator userValidator = new UserValidator();
+    private final ProfileValidator profileValidator = new ProfileValidator();
 
-
-    public FormattedResponse saveUser(User user) {
+    public FormattedResponse saveUser(RegistrationRequest request) {
         userValidator.initializeErrors();
+        profileValidator.initializeErrors();
 
         HashMap<String, ArrayList<String>> errors = userValidator.getErrors();
+        HashMap<String, ArrayList<String>> profileErrors = profileValidator.getErrors();
+        HashMap<String, ArrayList<String>> combinedErrors = new HashMap<>();
         HttpStatus httpStatus = HttpStatus.CREATED;
 
-
         try {
-            userValidator.checkEmail(user.getEmail());
-            userValidator.checkPassword(user.getPassword());
 
+            userValidator.checkEmail(request.getEmail());
+            userValidator.checkPasswordFormat(request.getPassword());
+            userValidator.checkPasswordRegistration(request.getPassword(), request.getVerifyPassword());
 
-            String unHashed = user.getPassword();
+            profileValidator.checkNullOrEmpty(
+                    request.getFirstName(),
+                    request.getLastName(),
+                    request.getAddress1(),
+                    request.getCity(),
+                    request.getState(),
+                    request.getZipCode(),
+                    request.getPhoneNumber(),
+                    request.getPhoneType()
+            );
 
-            user.setPassword(passwordEncoder.encode(unHashed));
+            profileValidator.checkFormat(
+                    request.getState(),
+                    request.getZipCode(),
+                    request.getPhoneNumber(),
+                    request.getPhoneType()
+            );
+            User found = userRepository.findByEmail(request.getEmail());
+            userValidator.checkExistsForCreation(found);
 
+            User newUser = new User();
 
-            User updated = userRepository.save(user);
+            newUser.setEmail(request.getEmail());
 
-            System.out.println(errors.get("password"));
-            return new FormattedResponse(httpStatus.value(), true, updated);
+            newUser.setPassword(passwordEncoder.encode(request.getPassword()));
 
-        } catch (DataIntegrityViolationException e) {
+            newUser.setRole(Role.valueOf(request.getRole()));
+
+            User createdUser = userRepository.save(newUser);
+
+            Profile newProfile = new Profile();
+            newProfile.setFirstName(request.getFirstName());
+            newProfile.setMiddleInitial(request.getMiddleInitial());
+            newProfile.setLastName(request.getLastName());
+            newProfile.setAddress1(request.getAddress1());
+            newProfile.setAddress2(request.getAddress2());
+            newProfile.setCity(request.getCity());
+            newProfile.setState(request.getState());
+            newProfile.setZipCode(request.getZipCode());
+            newProfile.setPhoneNumber(request.getPhoneNumber());
+            newProfile.setPhoneType(request.getPhoneType());
+            newProfile.setUserID(createdUser.getUserID());
+
+            profileRepository.save(newProfile);
+            return new FormattedResponse(httpStatus.value(), true, createdUser);
+        } catch (Exception e) {
+            e.printStackTrace();
             httpStatus = HttpStatus.BAD_REQUEST;
 
-            userValidator.setErrors("USER", "user already exists with this email.");
+            // combine profile and user errors
+            combinedErrors.putAll(errors);
+            combinedErrors.putAll(profileErrors);
 
-            return new ErrorResponse(httpStatus.value(), false, errors);
-        } catch (IllegalArgumentException e) {
-            httpStatus = HttpStatus.BAD_REQUEST;
-            return new FormattedResponse(httpStatus.value(), false, errors);
+            return new ErrorResponse(httpStatus.value(), false, combinedErrors);
         }
+
+//        try {
+//            userValidator.checkEmail(userAndProfile.get("user").getEmail());
+//            userValidator.checkPassword(user.getPassword());
+//
+//
+//            String unHashed = user.getPassword();
+//
+//            user.setPassword(passwordEncoder.encode(unHashed));
+//
+//
+//            User updated = userRepository.save(user);
+//
+//            System.out.println(errors.get("password"));
+//            return new FormattedResponse(httpStatus.value(), true, updated);
+//
+//        } catch (DataIntegrityViolationException e) {
+//            httpStatus = HttpStatus.BAD_REQUEST;
+//
+//            userValidator.setErrors("USER", "user already exists with this email.");
+//
+//            return new ErrorResponse(httpStatus.value(), false, errors);
+//        } catch (IllegalArgumentException e) {
+//            httpStatus = HttpStatus.BAD_REQUEST;
+//            return new FormattedResponse(httpStatus.value(), false, errors);
+//        }
     }
 
     public FormattedResponse updateUser(int id, User user) {

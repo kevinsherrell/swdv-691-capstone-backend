@@ -34,7 +34,7 @@ public class ProfileService {
             profileValidator.checkNullOrEmpty(
                     profile.getFirstName(),
                     profile.getLastName(),
-                    profile.getUserID(),
+//                    profile.getUserID(),
                     profile.getAddress1(),
                     profile.getCity(),
                     profile.getState(),
@@ -70,7 +70,7 @@ public class ProfileService {
             profileValidator.checkNullOrEmpty(
                     profile.getFirstName(),
                     profile.getLastName(),
-                    profile.getUserID(),
+//                    profile.getUserID(),
                     profile.getAddress1(),
                     profile.getCity(),
                     profile.getState(),

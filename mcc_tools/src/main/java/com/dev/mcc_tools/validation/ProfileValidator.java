@@ -7,6 +7,7 @@ import java.util.regex.Pattern;
 public class ProfileValidator extends MccValidator {
 
     public void checkForProfile(Profile profile) throws Exception {
+        System.out.println("checking if profile is found");
         if (profile == null) {
             setErrors("profile", "profile not found");
             throw new Exception();
@@ -16,7 +17,7 @@ public class ProfileValidator extends MccValidator {
     public void checkNullOrEmpty(
             String firstName,
             String lastName,
-            int userID,
+//            int userID,
             String address1,
             String city,
             String state,
@@ -24,6 +25,7 @@ public class ProfileValidator extends MccValidator {
             String phoneNumber,
             String phoneType
     ) throws Exception {
+        System.out.println("checking for profile nulls");
         if (firstName == null || firstName.isEmpty()) {
             setErrors("firstName", "first name cannot be empty");
         }
@@ -32,9 +34,9 @@ public class ProfileValidator extends MccValidator {
             setErrors("lastName", "last name cannot be empty");
         }
 
-        if (userID < 1) {
-            setErrors("userID", "userID must not be empty");
-        }
+//        if (userID < 1) {
+//            setErrors("userID", "userID must not be empty");
+//        }
 
 
         if (address1 == null || address1.isEmpty()) {
@@ -65,8 +67,9 @@ public class ProfileValidator extends MccValidator {
     }
 
     public void checkFormat(String state, String zipCode, String phoneNumber, String phoneType) throws Exception {
+        System.out.println("checking address format");
         String zipRegex = "\\d\\d\\d\\d\\d";
-        String phoneRegex = "\\d\\d\\d\\d\\d\\d\\d";
+        String phoneRegex = "\\d\\d\\d\\d\\d\\d\\d\\d\\d\\d";
         if (state.split("").length != 2) {
             setErrors("state", "state must be two character abbreviation");
         }
@@ -74,10 +77,10 @@ public class ProfileValidator extends MccValidator {
             setErrors("zipCode", "zip code must be 5 numbers");
         }
         if (!Pattern.matches(phoneRegex, phoneNumber)) {
-            setErrors("phoneNumber", "phone number must be 7 digits. no special characters i.e )(-.");
+            setErrors("phoneNumber", "phone number must be 10 digits. no special characters i.e )(-.");
         }
         if (!phoneType.equals("MOBILE") && !phoneType.equals("LANDLINE")) {
-            setErrors("phoneNumber", "phone type must be either MOBILE or LANDLINE");
+            setErrors("phoneType", "phone type must be either MOBILE or LANDLINE");
         }
 
         if (!errors.isEmpty()) {

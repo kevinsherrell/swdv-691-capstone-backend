@@ -15,6 +15,7 @@ public class MccValidator {
 
 
     public void setErrors(String field, String message) {
+        System.out.println("setting errors");
         if(errors.containsKey(field)){
             errors.get(field).add(message);
         }else{

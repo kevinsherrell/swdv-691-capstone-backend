@@ -61,6 +61,7 @@ public class AuthenticationService {
             return new ErrorResponse(httpStatus.value(), false, errors);
 
         } catch(Exception e){
+            httpStatus = HttpStatus.UNAUTHORIZED;
             System.out.println(e.getMessage());
             return new ErrorResponse(httpStatus.value(), false, errors);
 
