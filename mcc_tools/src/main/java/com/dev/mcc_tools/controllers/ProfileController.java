@@ -41,14 +41,6 @@ public class ProfileController {
 
         return new ResponseEntity<>(response, HttpStatusCode.valueOf(response.getStatusCode()));
     }
-///    @PostMapping("")
-//    public ResponseEntity<?> createNewProfile(@Valid @RequestBody Profile profile, BindingResult result) {
-//        HttpStatus httpStatus = HttpStatus.CREATED;
-//
-//        Profile created = profileService.saveOrUpdateProfile(profile);
-//        FormattedResponse response = new FormattedResponse(httpStatus.value(), true, created);
-//        return new ResponseEntity<>(response, httpStatus);
-//    }
 
     @GetMapping("")
     public ResponseEntity<?> getAllProfiles() {
@@ -95,30 +87,17 @@ public class ProfileController {
 
     @GetMapping("/user/{userID}")
     public ResponseEntity<?> getProfileByUserID(@PathVariable int userID) {
-      FormattedResponse response = profileService.findProfileByUserID(userID);
-      return new ResponseEntity<>(response, HttpStatusCode.valueOf(response.getStatusCode()));
+        FormattedResponse response = profileService.findProfileByUserID(userID);
+
+        return new ResponseEntity<>(response, HttpStatusCode.valueOf(response.getStatusCode()));
+
     }
 
+    @PutMapping("/update/{pk}")
+    public ResponseEntity<?> updateProfile(@PathVariable int pk, @RequestBody Profile profile) {
+        FormattedResponse response = profileService.updateProfile(pk, profile);
 
-//    @PutMapping("/update/{pk}")
-//    public ResponseEntity<?> updateProfile(@PathVariable int pk, @RequestBody Profile profile) {
-//        HttpStatus httpStatus = HttpStatus.CREATED;
-//        FormattedResponse response;
-//        HashMap<String, ArrayList<String>> errors = profileValidator.getErrors();
-////        HashMap<String, String> errors = profileValidator.getErrors();
-//
-//        Profile found = profileService.findProfileById(pk);
-//
-//        profileValidator.checkProfile(found);
-//
-//        if (errors.isEmpty()) {
-//            Profile updated = profileService.saveOrUpdateProfile(profile);
-//            response = new FormattedResponse(httpStatus.value(), true, updated);
-//        } else {
-//            httpStatus = HttpStatus.BAD_REQUEST;
-//            response = new ErrorResponse(httpStatus.value(), false, errors);
-//        }
-//
-//        return new ResponseEntity<>(response, httpStatus);
-//    }
+        return new ResponseEntity<>(response, HttpStatusCode.valueOf(response.getStatusCode()));
+
+    }
 }
