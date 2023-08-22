@@ -29,9 +29,6 @@ public class ProfileSearch {
 
         Root<Profile> root = query.from(Profile.class);
 
-        // phone number join ... and possibly the user join,  below caused issue that prevented data from being retrieved properly.
-        // Explore further...
-//        Join<Profile, PhoneNumber> phone = root.join("phoneNumber");
         Join<Profile, User> user = root.join("user");
 
         if (request.getFirstName() != null) {
@@ -48,11 +45,6 @@ public class ProfileSearch {
             predicates.add(lnameP);
         }
 
-//        if (request.getPhoneNumber() != null) {
-//            Predicate phoneP = builder
-//                    .like(phone.get("number"), "%" + request.getPhoneNumber() + "%");
-//            predicates.add(phoneP);
-//        }
 
         if (request.getEmail() != null) {
             Predicate emailP = builder
