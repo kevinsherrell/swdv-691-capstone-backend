@@ -49,7 +49,8 @@ public class OrderService {
         }
 
     }
-    public FormattedResponse updateOrder(int orderID,Order order) {
+
+    public FormattedResponse updateOrder(int orderID, Order order) {
         orderValidator.initializeErrors();
         HttpStatus httpStatus = HttpStatus.CREATED;
         HashMap<String, ArrayList<String>> errors = orderValidator.getErrors();
@@ -78,7 +79,7 @@ public class OrderService {
         }
     }
 
-    public FormattedResponse updateStatus (int orderID,String status) {
+    public FormattedResponse updateStatus(int orderID, String status) {
         orderValidator.initializeErrors();
         HttpStatus httpStatus = HttpStatus.CREATED;
         HashMap<String, ArrayList<String>> errors = orderValidator.getErrors();
@@ -114,15 +115,45 @@ public class OrderService {
 
     }
 
-    public Order findOrderById(int orderID) {
+    public FormattedResponse findOrderById(int orderID) {
+        orderValidator.initializeErrors();
+        HttpStatus httpStatus = HttpStatus.OK;
+        HashMap<String, ArrayList<String>> errors = orderValidator.getErrors();
 
-        Order found = orderRepository.findById(orderID);
-        return found;
+        try {
+            Order found = orderRepository.findById(orderID);
+
+            orderValidator.nullCheck("Order", found);
+
+            return new FormattedResponse(httpStatus.value(), true, found);
+
+        } catch (Exception e) {
+
+            httpStatus = HttpStatus.BAD_REQUEST;
+
+            return new ErrorResponse(httpStatus.value(), false, errors);
+
+        }
 
     }
 
-    public Iterable<Order> findByProfileID(int profileID){
-        Iterable<Order> found = orderRepository.findOrderByProfileID(profileID);
-        return found;
+    public FormattedResponse findAllByProfileID(int profileID) {
+        orderValidator.initializeErrors();
+        HttpStatus httpStatus = HttpStatus.OK;
+        HashMap<String, ArrayList<String>> errors = orderValidator.getErrors();
+
+        try {
+            Iterable<Order> found = orderRepository.findOrderByProfileID(profileID);
+            orderValidator.emptyCheck("Orders", found);
+
+            return new FormattedResponse(httpStatus.value(), true, found);
+
+        } catch (Exception e) {
+
+            httpStatus = HttpStatus.BAD_REQUEST;
+
+            return new ErrorResponse(httpStatus.value(), false, errors);
+
+        }
     }
 }

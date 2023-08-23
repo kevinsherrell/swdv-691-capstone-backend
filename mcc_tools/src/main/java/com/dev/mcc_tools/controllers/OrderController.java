@@ -92,25 +92,19 @@ public class OrderController {
 //        return new ResponseEntity<>(response, httpStatus);
 //    }
 
-//    @GetMapping("/{pk}")
-//    public ResponseEntity<?> getOrderByID(@PathVariable int pk) {
-//        HttpStatus httpStatus = HttpStatus.OK;
-//
-//        Order found = orderService.findOrderById(pk);
-//        FormattedResponse response = new FormattedResponse(httpStatus.value(), true, found);
-//        return new ResponseEntity<>(response, httpStatus);
-//    }
+    @GetMapping("/{pk}")
+    public ResponseEntity<?> getOrderByID(@PathVariable int pk) {
 
-//    @GetMapping("/profile/{profileID}")
-//    public ResponseEntity<?> getOrderByProfileID(@PathVariable int profileID) {
-//        HttpStatus httpStatus = HttpStatus.OK;
-//        FormattedResponse response;
-//
-//        Iterable<Order> found = orderService.findByProfileID(profileID);
-//
-//        response = new FormattedResponse(httpStatus.value(), true, found);
-//        return new ResponseEntity<>(response, httpStatus);
-//    }
+        FormattedResponse response = orderService.findOrderById(pk);
+
+        return new ResponseEntity<>(response, HttpStatusCode.valueOf(response.getStatusCode()));
+    }
+
+    @GetMapping("/profile/{profileID}")
+    public ResponseEntity<?> getOrderByProfileID(@PathVariable int profileID) {
+        FormattedResponse response = orderService.findAllByProfileID(profileID);
+        return new ResponseEntity<>(response, HttpStatusCode.valueOf(response.getStatusCode()));
+    }
 
 
     @PutMapping("/update/{pk}")
