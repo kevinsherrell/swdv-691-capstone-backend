@@ -97,7 +97,7 @@ public class AppointmentController {
     }
 
     @GetMapping("{pk}")
-    public ResponseEntity<?> getAppointmentByID(@PathVariable int pk) {
+    public ResponseEntity<?> getAppointmentByID(@PathVariable int pk) throws Exception {
         appointmentValidator.initializeErrors();
 
         HttpStatus httpStatus = HttpStatus.OK;
@@ -142,7 +142,7 @@ public class AppointmentController {
     }
 
     @PutMapping("/update/{pk}")
-    public ResponseEntity<?> updateAppointment(@PathVariable int pk, @RequestBody Appointment appointment) {
+    public ResponseEntity<?> updateAppointment(@PathVariable int pk, @RequestBody Appointment appointment) throws Exception {
         appointmentValidator.initializeErrors();
 
         HttpStatus httpStatus = HttpStatus.CREATED;
@@ -183,7 +183,7 @@ public class AppointmentController {
     }
 
     @PutMapping("/{pk}/update_status/{status}")
-    public ResponseEntity<?> updateStatus(@PathVariable int pk, @PathVariable String status) {
+    public ResponseEntity<?> updateStatus(@PathVariable int pk, @PathVariable String status) throws Exception {
         appointmentValidator.initializeErrors();
 
         HttpStatus httpStatus = HttpStatus.CREATED;
