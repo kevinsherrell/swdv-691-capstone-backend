@@ -63,8 +63,11 @@ public class ProfileService {
         HashMap<String, ArrayList<String>> errors = profileValidator.getErrors();
 
         try {
+
             Profile found = profileRepository.findById(profileID);
             profileValidator.checkForProfile(found);
+            // store the associated user in a variable
+            User associatedUser = found.getUser();
             profileValidator.checkIDMatch(found.getProfileID(), profile.getProfileID());
 
             profileValidator.checkNullOrEmpty(
@@ -87,6 +90,17 @@ public class ProfileService {
             );
 
             Profile created = profileRepository.save(profile);
+            System.out.println(found.getLastName());
+
+            /*
+            * problem - profile not showing associated user upon update.
+            *
+            * Temporary working solution. store the associate user from the found profile.
+            * set the user to the created profile after saving and return the result.
+            *
+            * this solution is working for now. Exploring a more efficient solution.
+            * */
+            created.setUser(associatedUser);
             return new FormattedResponse(httpStatus.value(), true, created);
         } catch (Exception e) {
             System.out.println(e.getMessage());
