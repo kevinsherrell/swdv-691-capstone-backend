@@ -36,9 +36,12 @@ public class MccValidator {
         return errors;
     }
 
-    public void nullCheck(String objectName, Object object){
+    public void nullCheck(String objectName, Object object) throws Exception {
         if(object == null){
             setErrors(objectName, objectName + " not found or does not exist");
+        }
+        if(!errors.isEmpty()){
+            throw new Exception();
         }
     }
     public void emptyCheck(String objectName, Iterable<?> objects){
