@@ -39,19 +39,24 @@ public class ProfileSearch {
             );
         }
 
-        if ((request.getLastName()) != null) {
+        if (request.getLastName() != null) {
             Predicate lnameP = builder
-                    .like(root.get("lastName"), "%" + request.getLastName() + "%");
+                    .like(builder.lower(root.get("lastName")), ("%" + request.getLastName() + "%").toLowerCase());
             predicates.add(lnameP);
         }
 
 
         if (request.getEmail() != null) {
             Predicate emailP = builder
-                    .like(user.get("email"), "%" + request.getEmail() +"%" );
+                    .like(builder.lower(user.get("email")), ("%" + request.getEmail() +"%").toLowerCase() );
             predicates.add(emailP);
         }
 
+        if(request.getPhoneNumber() != null){
+            Predicate phoneP = builder
+                    .like(root.get("phoneNumber"), "%" + request.getPhoneNumber() + "%");
+            predicates.add(phoneP);
+        }
 
         // final query
         query.where(
