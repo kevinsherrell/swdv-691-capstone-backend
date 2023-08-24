@@ -38,7 +38,7 @@ public class Appointment {
 
     @NotNull
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "America/Chicago")
     private Date date;
 
     @NotBlank
@@ -55,11 +55,11 @@ public class Appointment {
     private int profileID;
 
     @CreationTimestamp(source = SourceType.DB)
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "America/Chicago")
     private Date date_created;
 
     @UpdateTimestamp(source = SourceType.DB)
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "America/Chicago")
     private Date date_updated;
 
 

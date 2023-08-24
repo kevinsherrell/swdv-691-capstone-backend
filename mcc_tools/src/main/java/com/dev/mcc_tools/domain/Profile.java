@@ -62,11 +62,11 @@ public class Profile {
     private String phoneType;
 
     @CreationTimestamp(source = SourceType.DB)
-    @JsonFormat(pattern = "yyyy-mm-dd HH:mm")
+    @JsonFormat(pattern = "yyyy-mm-dd HH:mm", timezone = "America/Chicago")
     private Date date_created;
 
     @UpdateTimestamp(source = SourceType.DB)
-    @JsonFormat(pattern = "yyyy-mm-dd HH:mm")
+    @JsonFormat(pattern = "yyyy-mm-dd HH:mm", timezone = "America/Chicago")
     private Date date_updated;
 
     @OneToOne
