@@ -5,6 +5,7 @@ import com.dev.mcc_tools.controllers.FormattedResponse;
 import com.dev.mcc_tools.domain.Order;
 import com.dev.mcc_tools.domain.Profile;
 import com.dev.mcc_tools.domain.User;
+import com.dev.mcc_tools.email.EmailSenderService;
 import com.dev.mcc_tools.respositories.OrderRepository;
 import com.dev.mcc_tools.respositories.ProfileRepository;
 import com.dev.mcc_tools.respositories.UserRepository;
@@ -22,7 +23,10 @@ import java.util.NoSuchElementException;
 public class OrderService {
     @Autowired
     private OrderRepository orderRepository;
-
+    @Autowired
+    ProfileRepository profileRepository;
+    @Autowired
+    private EmailSenderService senderService;
     private final OrderValidator orderValidator = new OrderValidator();
 
     public FormattedResponse saveOrder(Order order) {
@@ -96,6 +100,12 @@ public class OrderService {
 
             Order updated = orderRepository.save(found);
 
+            // find profile and send email
+            Profile sendTo = profileRepository.findById(updated.getProfileID());
+
+            if (status.equals("arrived")) {
+                senderService.sendEmail(sendTo.getUser().getEmail(), "Your Order Has Arrived","HI "+ sendTo.getFirstName() + ", your order has arrived! Please log in to the customer portal and schedule your pickup");
+            }
             return new FormattedResponse(httpStatus.value(), true, updated);
 
         } catch (Exception e) {

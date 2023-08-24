@@ -2,9 +2,11 @@ package com.dev.mcc_tools.controllers;
 
 import com.dev.mcc_tools.domain.Order;
 import com.dev.mcc_tools.domain.Profile;
+import com.dev.mcc_tools.email.EmailSenderService;
 import com.dev.mcc_tools.search.OrderSearch;
 import com.dev.mcc_tools.search.OrderSearchRequest;
 import com.dev.mcc_tools.services.OrderService;
+import com.dev.mcc_tools.services.ProfileService;
 import com.dev.mcc_tools.validation.OrderValidator;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +28,9 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
     @Autowired
+    private ProfileService profileService;
+    @Autowired
     private OrderSearch orderSearch;
-
     private final OrderValidator orderValidator = new OrderValidator();
 
     @PostMapping("")
@@ -114,8 +117,6 @@ public class OrderController {
     public ResponseEntity<?> updateStatus(@PathVariable int pk, @PathVariable String status) throws Exception {
 
         FormattedResponse response = orderService.updateStatus(pk, status);
-
-        //send email then send response
 
         return new ResponseEntity<>(response, HttpStatusCode.valueOf(response.getStatusCode()));
     }
