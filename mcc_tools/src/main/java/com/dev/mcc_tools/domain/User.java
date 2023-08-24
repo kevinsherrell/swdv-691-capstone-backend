@@ -46,12 +46,12 @@ public class User implements UserDetails {
 
 
     @CreationTimestamp(source = SourceType.DB)
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "America/Chicago")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private Date date_created;
 
 
     @UpdateTimestamp(source = SourceType.DB)
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "America/Chicago")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private Date date_updated;
 
     @OneToOne

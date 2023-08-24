@@ -11,9 +11,11 @@ import jakarta.validation.Valid;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.Normalizer;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,12 +34,9 @@ public class AppointmentController {
 
     @GetMapping("/search")
     public ResponseEntity<?> AppointmentSearch(
-//            @RequestParam(required = false, name = "firstName") String firstName,
-//            @RequestParam(required = false, name = "lastName") String lastName,
             @RequestParam(required = false, name = "status") String status,
             @RequestParam(required = false, name = "minDate") String minDate,
             @RequestParam(required = false, name = "maxDate") String maxDate,
-//            @RequestParam(required = false, name = "invoiceNumber") String invoiceNumber,
             @RequestParam(required = false, name = "location") String location,
             @RequestParam(required = false, name = "minCreationDate") String minCreationDate,
             @RequestParam(required = false, name = "maxCreationDate") String maxCreationDate
@@ -48,14 +47,12 @@ public class AppointmentController {
         AppointmentSearchRequest request = new AppointmentSearchRequest();
 
         if (location != null) request.setLocation(location);
-//        if (firstName != null) request.setFirstName(firstName);
-//        if (lastName != null) request.setLastName(lastName);
+
         if (status != null) request.setStatus(status);
         if (minDate != null) request.setMinDate(minDate);
         if (maxDate != null) request.setMaxDate(maxDate);
         if (minCreationDate != null) request.setMinCreationDate(minCreationDate);
         if (maxCreationDate != null) request.setMaxCreationDate(maxCreationDate);
-//        if (invoiceNumber != null) request.setInvoiceNumber(invoiceNumber);
 
 
         Iterable<Appointment> found = appointmentSearch.findAllByCriteria(request);
@@ -65,146 +62,74 @@ public class AppointmentController {
 
     @PostMapping("")
     public ResponseEntity<?> createAppointment(@Valid @RequestBody Appointment appointment) {
-        appointmentValidator.initializeErrors();
 
-        HttpStatus httpStatus = HttpStatus.CREATED;
-        FormattedResponse response;
-//        HashMap<String, String> errors = appointmentValidator.getErrors();
-        HashMap<String, ArrayList<String>> errors = appointmentValidator.getErrors();
+        FormattedResponse response = appointmentService.saveAppointment(appointment);
 
-        // perform check here
-        appointmentValidator.checkStatus(appointment.getStatus());
-
-        if (errors.isEmpty()) {
-            Appointment created = appointmentService.saveOrUpdateAppointment(appointment);
-            response = new FormattedResponse(httpStatus.value(), true, created);
-        } else {
-            httpStatus = HttpStatus.BAD_REQUEST;
-            response = new ErrorResponse(httpStatus.value(), false, errors);
-        }
-
-        return new ResponseEntity<>(response, httpStatus);
+        return new ResponseEntity<>(response, HttpStatusCode.valueOf(response.getStatusCode()));
 
     }
 
     @GetMapping("")
     public ResponseEntity<?> getAllApointments() {
-        HttpStatus httpStatus = HttpStatus.OK;
-
-        Iterable<Appointment> found = appointmentService.findAllAppointments();
-        FormattedResponse response = new FormattedResponse(httpStatus.value(), true, found);
-        return new ResponseEntity<>(response, httpStatus);
+        FormattedResponse response = appointmentService.findAllAppointments();
+        return new ResponseEntity<>(response, HttpStatusCode.valueOf(response.getStatusCode()));
     }
 
     @GetMapping("{pk}")
     public ResponseEntity<?> getAppointmentByID(@PathVariable int pk) throws Exception {
-        appointmentValidator.initializeErrors();
 
-        HttpStatus httpStatus = HttpStatus.OK;
-        FormattedResponse response;
+        FormattedResponse response = appointmentService.findByAppointmentID(pk);
 
-        HashMap<String, ArrayList<String>> errors = appointmentValidator.getErrors();
-//        HashMap<String, String> errors = appointmentValidator.getErrors();
-
-        Appointment found = appointmentService.findByAppointmentID(pk);
-        // check for null
-        appointmentValidator.nullCheck("appointment", found);
-
-        if (errors.isEmpty()) {
-            response = new FormattedResponse(httpStatus.value(), true, found);
-        } else {
-            httpStatus = HttpStatus.BAD_REQUEST;
-            response = new ErrorResponse(httpStatus.value(), false, errors);
-        }
-        return new ResponseEntity<>(response, httpStatus);
+        return new ResponseEntity<>(response, HttpStatusCode.valueOf(response.getStatusCode()));
     }
 
     @GetMapping("/profile/{profileID}")
     public ResponseEntity<?> getAppointmentsByProfileID(@PathVariable int profileID) {
-        HttpStatus httpStatus = HttpStatus.OK;
-        FormattedResponse response;
 
-        Iterable<Appointment> found = appointmentService.findByProfileID(profileID);
-        response = new FormattedResponse(httpStatus.value(), true, found);
 
-        return new ResponseEntity<>(response, httpStatus);
+        FormattedResponse response = appointmentService.findByProfileID(profileID);
+
+        return new ResponseEntity<>(response, HttpStatusCode.valueOf(response.getStatusCode()));
     }
 
     @GetMapping("/order/{orderID}")
     public ResponseEntity<?> getAppointmentsByOrderID(@PathVariable int orderID) {
-        HttpStatus httpStatus = HttpStatus.OK;
-        FormattedResponse response;
 
-        Iterable<Appointment> found = appointmentService.findByOrderID(orderID);
-        response = new FormattedResponse(httpStatus.value(), true, found);
+        FormattedResponse response = appointmentService.findByOrderID(orderID);
 
-        return new ResponseEntity<>(response, httpStatus);
+        return new ResponseEntity<>(response, HttpStatusCode.valueOf(response.getStatusCode()));
     }
 
     @PutMapping("/update/{pk}")
     public ResponseEntity<?> updateAppointment(@PathVariable int pk, @RequestBody Appointment appointment) throws Exception {
-        appointmentValidator.initializeErrors();
 
-        HttpStatus httpStatus = HttpStatus.CREATED;
-        FormattedResponse response;
-//        HashMap<String, String> errors = appointmentValidator.getErrors();
-        HashMap<String, ArrayList<String>> errors = appointmentValidator.getErrors();
-
-        Appointment found = appointmentService.findByAppointmentID(pk);
-
-        // checks if the order id matches the id given in the path variable
-        appointmentValidator.checkIDMatch(pk, appointment.getAppointmentID());
-        // checks if the order exists in the database
-        appointmentValidator.nullCheck("Appointment", found);
-        // checks if the order fields are formatted correctly
-        appointmentValidator.checkStatus(appointment.getStatus());
-
-
-        if (errors.isEmpty()) {
-            // protects these values from being changed on frontend
-            appointment.setAppointmentID(found.getAppointmentID());
-            appointment.setProfileID(found.getProfileID());
-            appointment.setOrderID(found.getOrderID());
-            appointment.setDate_created(found.getDate_created());
-
-
-            if (!appointment.getDate().equals(found.getDate())) found.setDate(appointment.getDate());
-            if (!appointment.getStatus().equals(found.getStatus())) found.setStatus(appointment.getStatus());
-            if (!appointment.getNotes().equals(found.getNotes())) found.setNotes(appointment.getNotes());
-
-            Appointment updated = appointmentService.saveOrUpdateAppointment(found);
-            response = new FormattedResponse(httpStatus.value(), true, updated);
-        } else {
-            httpStatus = HttpStatus.BAD_REQUEST;
-            response = new ErrorResponse(httpStatus.value(), false, errors);
-        }
-
-        return new ResponseEntity<>(response, httpStatus);
+        FormattedResponse response = appointmentService.updateAppointment(pk, appointment);
+        return new ResponseEntity<>(response, HttpStatusCode.valueOf(response.getStatusCode()));
     }
 
-    @PutMapping("/{pk}/update_status/{status}")
-    public ResponseEntity<?> updateStatus(@PathVariable int pk, @PathVariable String status) throws Exception {
-        appointmentValidator.initializeErrors();
-
-        HttpStatus httpStatus = HttpStatus.CREATED;
-        FormattedResponse response;
-
-        HashMap<String, ArrayList<String>> errors = appointmentValidator.getErrors();
-//        HashMap<String, String> errors = appointmentValidator.getErrors();
-
-        Appointment found = appointmentService.findByAppointmentID(pk);
-
-        appointmentValidator.checkStatus(status);
-        appointmentValidator.nullCheck("Order", found);
-
-        if (errors.isEmpty()) {
-            found.setStatus(status);
-            appointmentService.saveOrUpdateAppointment(found);
-            response = new FormattedResponse(httpStatus.value(), true, found);
-        } else {
-            httpStatus = HttpStatus.BAD_REQUEST;
-            response = new ErrorResponse(httpStatus.value(), false, errors);
-        }
-        return new ResponseEntity<>(response, httpStatus);
-    }
+//    @PutMapping("/{pk}/update_status/{status}")
+//    public ResponseEntity<?> updateStatus(@PathVariable int pk, @PathVariable String status) throws Exception {
+//        appointmentValidator.initializeErrors();
+//
+//        HttpStatus httpStatus = HttpStatus.CREATED;
+//        FormattedResponse response;
+//
+//        HashMap<String, ArrayList<String>> errors = appointmentValidator.getErrors();
+////        HashMap<String, String> errors = appointmentValidator.getErrors();
+//
+//        Appointment found = appointmentService.findByAppointmentID(pk);
+//
+//        appointmentValidator.checkStatus(status);
+//        appointmentValidator.nullCheck("Order", found);
+//
+//        if (errors.isEmpty()) {
+//            found.setStatus(status);
+//            appointmentService.saveOrUpdateAppointment(found);
+//            response = new FormattedResponse(httpStatus.value(), true, found);
+//        } else {
+//            httpStatus = HttpStatus.BAD_REQUEST;
+//            response = new ErrorResponse(httpStatus.value(), false, errors);
+//        }
+//        return new ResponseEntity<>(response, httpStatus);
+//    }
 }
