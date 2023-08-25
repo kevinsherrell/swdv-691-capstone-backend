@@ -11,6 +11,7 @@ import jakarta.persistence.criteria.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -90,5 +91,16 @@ public class AppointmentSearch {
         TypedQuery<Appointment> typedQuery = entityManager.createQuery(query);
         return typedQuery.getResultList();
     }
-
+//    Iterable<Appointment> appointmentsForMonth(Timestamp date) {
+//        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+//        CriteriaQuery<Appointment> query = builder.createQuery(Appointment.class);
+//        Root<Appointment> root = query.from(Appointment.class);
+//
+//        query.where(
+//                builder.equal(builder.)
+//        )
+//        TypedQuery<Appointment> typedQuery = entityManager.createQuery(query);
+//        return typedQuery.getResultList();
+//
+//    }
 }

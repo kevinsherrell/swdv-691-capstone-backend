@@ -25,12 +25,24 @@ public class AppointmentSearchRequest {
     private String minCreationDate;
     private String maxCreationDate;
     private String location;
+    private String date;
 //    private String invoiceNumber;
 
     public Timestamp parseDateString(String dateString) throws ParseException {
         DateTimeFormatter dt = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         try{
             return toTimestamp(dateString + " 00:00", dt);
+
+        }catch(DateTimeParseException e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public Timestamp parseDateTimeString(String dateString) throws ParseException {
+        DateTimeFormatter dt = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        try{
+            return toTimestamp(dateString, dt);
 
         }catch(DateTimeParseException e){
             e.printStackTrace();

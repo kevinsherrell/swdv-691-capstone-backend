@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.text.Format;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -125,7 +126,7 @@ public class AppointmentService {
         HashMap<String , ArrayList<String>> errors = appointmentValidator.getErrors();
         try {
 
-            Iterable<Appointment> found = appointmentRepository.findAppointmentsByDateGreaterThanEqualAndDateLessThanEqual(date, date2);
+            Iterable<Appointment> found = appointmentRepository.findAppointmentsByAppointmentDateGreaterThanEqualAndAppointmentDateLessThanEqual(date, date2);
 
             return new FormattedResponse(httpStatus.value(), true,found);
 
@@ -152,5 +153,16 @@ public class AppointmentService {
             System.out.println("bad request");
             return new ErrorResponse(httpStatus.value(), false, errors);
         }
+    }
+
+    public FormattedResponse findCountDateEqual(Timestamp date){
+        Long count = appointmentRepository.findAppointmentsByDateEquals(date);
+        return new FormattedResponse(HttpStatus.OK.value(), true, count);
+    }
+
+    public FormattedResponse findDatesForMonth(Timestamp date){
+       Iterable <Timestamp> found = appointmentRepository.findAppointmentsByMonth(date);
+
+       return new FormattedResponse((HttpStatus.OK.value()), true, found);
     }
 }

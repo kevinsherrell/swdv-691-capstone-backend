@@ -34,7 +34,7 @@ public class AppointmentController {
     private AppointmentSearch appointmentSearch;
 
     private final AppointmentValidator appointmentValidator = new AppointmentValidator();
-    private OrderSearchRequest searchRequest;
+//    private OrderSearchRequest searchRequest;
 
     @GetMapping("/search")
     public ResponseEntity<?> AppointmentSearch(
@@ -99,6 +99,13 @@ public class AppointmentController {
         FormattedResponse response = appointmentService.findByCreatedDatesBetween(request.parseDateString(request.getMinDate()), request.parseDateString(request.getMaxDate()));
 
 
+        return new ResponseEntity<>(response, HttpStatusCode.valueOf(response.getStatusCode()));
+    }
+
+    @GetMapping("/availableByMonth")
+    public ResponseEntity<?> datesForMonth(@RequestParam(required = true, name = "appointmentDate") String appointmentDate) throws ParseException {
+        AppointmentSearchRequest searchRequest = new AppointmentSearchRequest();
+        FormattedResponse response = appointmentService.findDatesForMonth(searchRequest.parseDateString(appointmentDate));
         return new ResponseEntity<>(response, HttpStatusCode.valueOf(response.getStatusCode()));
     }
 
