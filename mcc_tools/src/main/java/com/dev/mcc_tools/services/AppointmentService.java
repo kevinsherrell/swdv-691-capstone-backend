@@ -4,15 +4,12 @@ import com.dev.mcc_tools.controllers.ErrorResponse;
 import com.dev.mcc_tools.controllers.FormattedResponse;
 import com.dev.mcc_tools.domain.Appointment;
 import com.dev.mcc_tools.respositories.AppointmentRepository;
-import com.dev.mcc_tools.respositories.ProfileRepository;
 import com.dev.mcc_tools.validation.AppointmentValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.net.http.HttpResponse;
-import java.text.Format;
-import java.text.Normalizer;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -97,12 +94,12 @@ public class AppointmentService {
         HttpStatus httpStatus = HttpStatus.OK;
         HashMap<String, ArrayList<String>> errors = appointmentValidator.getErrors();
 
-        try{
+        try {
 
             Iterable<Appointment> found = appointmentRepository.findAppointmentsByProfileID(profileID);
 
             return new FormattedResponse(httpStatus.value(), true, found);
-        }catch(Exception e){
+        } catch (Exception e) {
             httpStatus = HttpStatus.BAD_REQUEST;
             return new ErrorResponse(httpStatus.value(), false, errors);
         }
@@ -112,13 +109,47 @@ public class AppointmentService {
         HttpStatus httpStatus = HttpStatus.OK;
         HashMap<String, ArrayList<String>> errors = appointmentValidator.getErrors();
 
-        try{
+        try {
 
             Iterable<Appointment> found = appointmentRepository.findAppointmentByOrderID(orderID);
 
-           return new FormattedResponse(httpStatus.value(), true, found);
-        }catch(Exception e){
+            return new FormattedResponse(httpStatus.value(), true, found);
+        } catch (Exception e) {
             httpStatus = HttpStatus.BAD_REQUEST;
+            return new ErrorResponse(httpStatus.value(), false, errors);
+        }
+    }
+
+    public FormattedResponse findByDatesBetween( Timestamp date, Timestamp date2) {
+        HttpStatus httpStatus = HttpStatus.OK;
+        HashMap<String , ArrayList<String>> errors = appointmentValidator.getErrors();
+        try {
+
+            Iterable<Appointment> found = appointmentRepository.findAppointmentsByDateGreaterThanEqualAndDateLessThanEqual(date, date2);
+
+            return new FormattedResponse(httpStatus.value(), true,found);
+
+        }catch(Exception e) {
+            httpStatus = HttpStatus.BAD_REQUEST;
+            e.printStackTrace();
+            return new ErrorResponse(httpStatus.value(), false, errors);
+        }
+    }
+
+    public FormattedResponse findByCreatedDatesBetween( Timestamp date, Timestamp date2) {
+        HttpStatus httpStatus = HttpStatus.OK;
+        HashMap<String , ArrayList<String>> errors = appointmentValidator.getErrors();
+        try {
+
+
+            Iterable<Appointment> found = appointmentRepository.findAppointmentsByDateCreatedGreaterThanEqualAndDateCreatedLessThanEqual(date, date2);
+
+            return new FormattedResponse(httpStatus.value(), true,found);
+
+        }catch(Exception e) {
+            httpStatus = HttpStatus.BAD_REQUEST;
+            e.printStackTrace();
+            System.out.println("bad request");
             return new ErrorResponse(httpStatus.value(), false, errors);
         }
     }

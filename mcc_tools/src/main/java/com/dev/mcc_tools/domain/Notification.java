@@ -35,12 +35,14 @@ public class Notification {
     @Column(name = "profile_id")
     private int profileID;
 
+    @Column(name = "date_created")
     @CreationTimestamp(source = SourceType.DB)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
-    private Date date_created;
+    private Date dateCreated;
+    @Column(name = "date_updated")
     @UpdateTimestamp(source = SourceType.DB)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
-    private Date date_updated;
+    private Date dateUpdated;
 
 
     public Notification(int notificationID, String header, String body, String status, int profileID) {

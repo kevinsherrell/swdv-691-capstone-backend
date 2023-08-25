@@ -157,7 +157,7 @@ public class UserService {
 
 //            if (errors.isEmpty()) {
             user.setPassword(found.getPassword());
-            user.setDate_created(found.getDate_created());
+            user.setDateCreated(found.getDateCreated());
             userRepository.save(user);
             return new FormattedResponse(httpStatus.value(), true, user);
 //            }

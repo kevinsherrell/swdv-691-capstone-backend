@@ -68,7 +68,7 @@ public class OrderService {
 
             orderValidator.initiateOrderChecks(order);
 
-            order.setDate_created(found.getDate_created());
+            order.setDateCreated(found.getDateCreated());
             Order updated = orderRepository.save(order);
 
 

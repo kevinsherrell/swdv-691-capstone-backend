@@ -40,13 +40,15 @@ public class Order{
     @Column(name = "profile_id")
     private int profileID;
 
+    @Column(name = "date_created")
     @CreationTimestamp(source = SourceType.DB)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
-    private Date date_created;
+    private Date dateCreated;
 
+    @Column(name = "date_updated")
     @UpdateTimestamp(source = SourceType.DB)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
-    private Date date_updated;
+    private Date dateUpdated;
 
     @ManyToOne
     @JoinColumn(name = "profile_id", referencedColumnName = "profile_id", insertable = false, updatable = false)

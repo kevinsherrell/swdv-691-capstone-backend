@@ -15,9 +15,13 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
 import java.text.Normalizer;
 import java.text.ParseException;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 @RestController
@@ -30,7 +34,7 @@ public class AppointmentController {
     private AppointmentSearch appointmentSearch;
 
     private final AppointmentValidator appointmentValidator = new AppointmentValidator();
-
+    private OrderSearchRequest searchRequest;
 
     @GetMapping("/search")
     public ResponseEntity<?> AppointmentSearch(
@@ -58,6 +62,44 @@ public class AppointmentController {
         Iterable<Appointment> found = appointmentSearch.findAllByCriteria(request);
         response = new FormattedResponse(httpStatus.value(), true, found);
         return new ResponseEntity<>(response, httpStatus);
+    }
+
+    @GetMapping("/search/datesBetween")
+    public ResponseEntity<?> findDatesBetween(
+            @RequestParam(required = false, name = "date") String date,
+            @RequestParam(required = false, name = "date2") String date2
+    ) throws ParseException {
+
+        AppointmentSearchRequest request = new AppointmentSearchRequest();
+
+        DateTimeFormatter dtFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
+        if (date != null) request.setMinDate(date);
+        if (date2 != null) request.setMaxDate(date2);
+
+
+        FormattedResponse response = appointmentService.findByDatesBetween(request.parseDateString(request.getMinDate()), request.parseDateString(request.getMaxDate()));
+
+
+        return new ResponseEntity<>(response, HttpStatusCode.valueOf(response.getStatusCode()));
+    }
+
+    @GetMapping("/search/createdBetween")
+    public ResponseEntity<?> findCreatedBetween(
+            @RequestParam(required = false, name = "date") String date,
+            @RequestParam(required = false, name = "date2") String date2
+    ) throws ParseException {
+
+        AppointmentSearchRequest request = new AppointmentSearchRequest();
+
+        if (date != null) request.setMinDate(date);
+        if (date2 != null) request.setMaxDate(date2);
+
+
+        FormattedResponse response = appointmentService.findByCreatedDatesBetween(request.parseDateString(request.getMinDate()), request.parseDateString(request.getMaxDate()));
+
+
+        return new ResponseEntity<>(response, HttpStatusCode.valueOf(response.getStatusCode()));
     }
 
     @PostMapping("")
