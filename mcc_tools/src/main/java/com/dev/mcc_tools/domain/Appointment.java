@@ -13,6 +13,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SourceType;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
@@ -47,13 +48,13 @@ public class Appointment {
     private int profileID;
 
     @Column(name = "date_created")
-    @CreationTimestamp(source = SourceType.DB)
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    @CreationTimestamp
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "America/Chicago")
     private Date dateCreated;
 
     @Column(name = "date_updated")
-    @UpdateTimestamp(source = SourceType.DB)
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    @UpdateTimestamp
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "America/Chicago")
     private Date dateUpdated;
 
 
