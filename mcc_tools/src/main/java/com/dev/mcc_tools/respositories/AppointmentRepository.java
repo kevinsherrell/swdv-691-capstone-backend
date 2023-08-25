@@ -27,8 +27,8 @@ public interface AppointmentRepository extends CrudRepository<Appointment, Integ
 
     Iterable<Appointment> findAppointmentsByDateCreatedGreaterThanEqualAndDateCreatedLessThanEqual(Timestamp date, Timestamp date2);
 
-    @Query(value = "select appointmentDate from Appointment where date_trunc('month', CAST(appointmentDate as timestamp)) = date_trunc('month', CAST(?1 as timestamp))")
-    Iterable<Timestamp> findAppointmentsByMonth(Timestamp appointmentDate);
+    @Query(value = "select a  from Appointment a join a.orders o where date_trunc('month', CAST(a.appointmentDate as timestamp)) = date_trunc('month', CAST(?1 as timestamp)) AND o.location = ?2 ")
+    Iterable<Appointment> findAppointmentsByMonth(Timestamp appointmentDate, String location);
 
     @Query(value = "SELECT COUNT(*) from Appointment where appointmentDate  = ?1")
     Long findAppointmentsByDateEquals(Timestamp date);

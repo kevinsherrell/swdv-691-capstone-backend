@@ -160,8 +160,8 @@ public class AppointmentService {
         return new FormattedResponse(HttpStatus.OK.value(), true, count);
     }
 
-    public FormattedResponse findDatesForMonth(Timestamp date){
-       Iterable <Timestamp> found = appointmentRepository.findAppointmentsByMonth(date);
+    public FormattedResponse findDatesForMonth(Timestamp date ,String location){
+       Iterable <Appointment> found = appointmentRepository.findAppointmentsByMonth(date, location);
 
        return new FormattedResponse((HttpStatus.OK.value()), true, found);
     }

@@ -103,9 +103,9 @@ public class AppointmentController {
     }
 
     @GetMapping("/availableByMonth")
-    public ResponseEntity<?> datesForMonth(@RequestParam(required = true, name = "appointmentDate") String appointmentDate) throws ParseException {
+    public ResponseEntity<?> datesForMonth(@RequestParam(required = true, name = "appointmentDate") String appointmentDate, @RequestParam(required = true, name = "location") String location) throws ParseException {
         AppointmentSearchRequest searchRequest = new AppointmentSearchRequest();
-        FormattedResponse response = appointmentService.findDatesForMonth(searchRequest.parseDateString(appointmentDate));
+        FormattedResponse response = appointmentService.findDatesForMonth(searchRequest.parseDateString(appointmentDate),location);
         return new ResponseEntity<>(response, HttpStatusCode.valueOf(response.getStatusCode()));
     }
 
