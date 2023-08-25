@@ -45,14 +45,16 @@ public class User implements UserDetails {
     private Role role;
 
 
+    @Column(name = "daet_created")
     @CreationTimestamp(source = SourceType.DB)
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "America/Chicago")
-    private Date date_created;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    private Date dateCreated;
 
 
+    @Column(name = "date_updated")
     @UpdateTimestamp(source = SourceType.DB)
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "America/Chicago")
-    private Date date_updated;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    private Date dateUpdated;
 
     @OneToOne
     @JoinColumn(name = "user_id", referencedColumnName = "user_id", insertable = false, updatable = false)

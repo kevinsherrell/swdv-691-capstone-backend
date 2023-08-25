@@ -2,9 +2,6 @@ package com.dev.mcc_tools.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonSetter;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -15,11 +12,6 @@ import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SourceType;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.format.annotation.DateTimeFormat;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 import java.util.Date;
 import java.util.List;
@@ -36,10 +28,10 @@ public class Appointment {
     @Column(name = "appointment_id")
     private int appointmentID;
 
+    @Column(name = "appointment_date")
     @NotNull
-
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "America/Chicago")
-    private Date date;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    private Date appointmentDate;
 
     @NotBlank
     private String status;
@@ -54,13 +46,15 @@ public class Appointment {
     @Column(name = "profile_id")
     private int profileID;
 
+    @Column(name = "date_created")
     @CreationTimestamp(source = SourceType.DB)
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "America/Chicago")
-    private Date date_created;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    private Date dateCreated;
 
+    @Column(name = "date_updated")
     @UpdateTimestamp(source = SourceType.DB)
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "America/Chicago")
-    private Date date_updated;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    private Date dateUpdated;
 
 
     @OneToMany

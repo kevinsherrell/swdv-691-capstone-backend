@@ -61,13 +61,15 @@ public class Profile {
     @Column(name = "phone_type")
     private String phoneType;
 
+    @Column(name = "date_created")
     @CreationTimestamp(source = SourceType.DB)
-    @JsonFormat(pattern = "yyyy-mm-dd HH:mm", timezone = "America/Chicago")
-    private Date date_created;
+    @JsonFormat(pattern = "yyyy-mm-dd HH:mm")
+    private Date dateCreated;
 
+    @Column(name = "date_updated")
     @UpdateTimestamp(source = SourceType.DB)
-    @JsonFormat(pattern = "yyyy-mm-dd HH:mm", timezone = "America/Chicago")
-    private Date date_updated;
+    @JsonFormat(pattern = "yyyy-mm-dd HH:mm")
+    private Date dateUpdated;
 
     @OneToOne
     @JoinColumn(name = "user_id", referencedColumnName = "user_id", insertable = false, updatable = false)
