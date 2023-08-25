@@ -42,6 +42,7 @@ public class AppointmentSearchRequest {
     public Timestamp parseDateTimeString(String dateString) throws ParseException {
         DateTimeFormatter dt = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         try{
+            System.out.println(toTimestamp(dateString, dt));
             return toTimestamp(dateString, dt);
 
         }catch(DateTimeParseException e){
