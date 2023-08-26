@@ -39,11 +39,11 @@ public class AppointmentController {
     @GetMapping("/search")
     public ResponseEntity<?> AppointmentSearch(
             @RequestParam(required = false, name = "status") String status,
-            @RequestParam(required = false, name = "minDate") String minDate,
-            @RequestParam(required = false, name = "maxDate") String maxDate,
-            @RequestParam(required = false, name = "location") String location,
-            @RequestParam(required = false, name = "minCreationDate") String minCreationDate,
-            @RequestParam(required = false, name = "maxCreationDate") String maxCreationDate
+//            @RequestParam(required = false, name = "minDate") String minDate,
+//            @RequestParam(required = false, name = "maxDate") String maxDate,
+            @RequestParam(required = false, name = "location") String location
+//            @RequestParam(required = false, name = "minCreationDate") String minCreationDate,
+//            @RequestParam(required = false, name = "maxCreationDate") String maxCreationDate
     ) throws ParseException {
         HttpStatus httpStatus = HttpStatus.OK;
         FormattedResponse response;
@@ -53,10 +53,10 @@ public class AppointmentController {
         if (location != null) request.setLocation(location);
 
         if (status != null) request.setStatus(status);
-        if (minDate != null) request.setMinDate(minDate);
-        if (maxDate != null) request.setMaxDate(maxDate);
-        if (minCreationDate != null) request.setMinCreationDate(minCreationDate);
-        if (maxCreationDate != null) request.setMaxCreationDate(maxCreationDate);
+//        if (minDate != null) request.setMinDate(minDate);
+//        if (maxDate != null) request.setMaxDate(maxDate);
+//        if (minCreationDate != null) request.setMinCreationDate(minCreationDate);
+//        if (maxCreationDate != null) request.setMaxCreationDate(maxCreationDate);
 
 
         Iterable<Appointment> found = appointmentSearch.findAllByCriteria(request);
