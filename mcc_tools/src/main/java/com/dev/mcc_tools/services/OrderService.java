@@ -71,7 +71,11 @@ public class OrderService {
             order.setDateCreated(found.getDateCreated());
             Order updated = orderRepository.save(order);
 
+            Profile sendTo = profileRepository.findById(updated.getProfileID());
 
+            if (!order.getStatus().equals(found.getStatus()) && order.getStatus().equals("arrived")) {
+                senderService.sendEmail(sendTo.getUser().getEmail(), "Your Order Has Arrived", "HI " + sendTo.getFirstName() + ", your order has arrived! Please log in to the customer portal and schedule your pickup");
+            }
             return new FormattedResponse(httpStatus.value(), true, updated);
 
         } catch (Exception e) {
@@ -104,7 +108,7 @@ public class OrderService {
             Profile sendTo = profileRepository.findById(updated.getProfileID());
 
             if (status.equals("arrived")) {
-                senderService.sendEmail(sendTo.getUser().getEmail(), "Your Order Has Arrived","HI "+ sendTo.getFirstName() + ", your order has arrived! Please log in to the customer portal and schedule your pickup");
+                senderService.sendEmail(sendTo.getUser().getEmail(), "Your Order Has Arrived", "HI " + sendTo.getFirstName() + ", your order has arrived! Please log in to the customer portal and schedule your pickup");
             }
             return new FormattedResponse(httpStatus.value(), true, updated);
 

@@ -53,7 +53,7 @@ public class AuthenticationController {
 
         FormattedResponse response = userService.saveUser(request);
 
-//        senderService.sendEmail(user.getEmail(), "Account Created", "Your account has been created. " + unHashed + " is your temporary password, click this link to get started");
+        senderService.sendEmail(request.getEmail(), "Account Created", "Your account has been created. " + request.getPassword() + " is your temporary password, click this link to get started");
 
         return new ResponseEntity<>(response, HttpStatusCode.valueOf(response.getStatusCode()));
     }
