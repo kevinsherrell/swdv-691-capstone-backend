@@ -56,7 +56,7 @@ public class AppointmentService {
             appointmentValidator.checkIDMatch(appointmentID, appointment.getAppointmentID());
 
             appointmentValidator.nullCheck("Appointment", found);
-
+            appointment.setDateCreated(found.getDateCreated());
             appointmentValidator.checkStatus(appointment.getStatus());
 
 
